@@ -44,4 +44,8 @@ public class Doctor extends Person {
         return getName() + "," + getSurname() + "," + getDob() + ","
                 + getMobileNo() + "," + getMedicalLicenceNo() + "," +  getSpecialization() + "\n";
     }
+
+    public String identity() {
+        return getMedicalLicenceNo() + "-" + getName() + " " + getSurname() + "\n";
+    }
 }

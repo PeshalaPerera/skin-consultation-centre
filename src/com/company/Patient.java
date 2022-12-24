@@ -17,4 +17,9 @@ public class Patient extends Person {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String toFormattedString() {
+        return getName() + "," + getSurname() + "," + getMobileNo() + ","
+                + getDob() + "," + getId();
+    }
 }

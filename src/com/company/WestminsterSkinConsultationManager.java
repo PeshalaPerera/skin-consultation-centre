@@ -66,7 +66,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     public void printlist() {
         try {
             if (doctorList.size() > 0) {
-                Collections.sort(doctorList, new Comparator<Doctor>() {
+                doctorList.sort(new Comparator<Doctor>() {
                     public int compare(Doctor d1, Doctor d2) {
                         return d1.getSurname().toLowerCase().compareTo(d2.getSurname().toLowerCase());
                     }
@@ -85,7 +85,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     @Override
     public void saveFile() {
         try {
-            Formatter formatter = new Formatter("src/list.txt");
+            Formatter formatter = new Formatter("src/doctorsList.txt");
             if (doctorList.size() > 0) {
                 for (Doctor doctor: doctorList) {
                     formatter.format("%s", doctor.toFormattedString());
@@ -102,13 +102,13 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
 
     @Override
     public void viewGui() {
-        MainFrame myFrame = new MainFrame();
-        myFrame.start();
+        SkinConsultationCentre myFrame = new SkinConsultationCentre();
+        myFrame.start(doctorList);
     }
 
     private void initialise() {
         try {
-            File myObj = new File("src/list.txt");
+            File myObj = new File("src/doctorsList.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();

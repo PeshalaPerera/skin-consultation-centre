@@ -7,6 +7,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainFrame extends JFrame {
@@ -41,48 +42,36 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         JFrame frame = new JFrame("Skin Consultation Centre");
 
-        btnExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (JOptionPane.showConfirmDialog(MainPanel,
-                        "Are you sure you want to close this window?", "Close Window?",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                }
+        btnExit.addActionListener(e -> {
+            if (JOptionPane.showConfirmDialog(MainPanel,
+                    "Are you sure you want to close this window?", "Close Window?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                System.exit(0);
             }
         });
-        resetBtnPatient.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtPatientName.setText("");
-                txtPatientSurname.setText("");
-                txtPatientDOB.setText("");
-                txtPatientMobileNo.setText("");
-                txtPatientNIC.setText("");
-            }
+        resetBtnPatient.addActionListener(e -> {
+            txtPatientName.setText("");
+            txtPatientSurname.setText("");
+            txtPatientDOB.setText("");
+            txtPatientMobileNo.setText("");
+            txtPatientNIC.setText("");
         });
-        resetBtnDoctorAvailability.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtDoctorName.setText("");
-                txtDoctorSpeciality.setText("");
-            }
+        resetBtnDoctorAvailability.addActionListener(e -> {
+            txtDoctorName.setText("");
+            txtDoctorSpeciality.setText("");
         });
-        resetBtnConsultation.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtConsultationId.setText("");
-                txtCnsultationPatientName.setText("");
-                txtCnsultationDoctorName.setText("");
-                txtCnsultationHours.setText("");
-                txtCnsultationCost.setText("");
-                txtCnsultationNotes.setText("");
-            }
+        resetBtnConsultation.addActionListener(e -> {
+            txtConsultationId.setText("");
+            txtCnsultationPatientName.setText("");
+            txtCnsultationDoctorName.setText("");
+            txtCnsultationHours.setText("");
+            txtCnsultationCost.setText("");
+            txtCnsultationNotes.setText("");
         });
     }
 
-    public void start() {
+    public void start(ArrayList<Doctor> doctorList) {
         setContentPane(MainPanel);
         setTitle("Skin Consultation Centre");
         setSize(1200, 700);
@@ -94,7 +83,7 @@ public class MainFrame extends JFrame {
     private void createTable() {
 //        Object[][] doctors = new ArrayList<>();
         try {
-            File myObj = new File("src/list.txt");
+            File myObj = new File("src/doctorsList.txt");
             Scanner myReader = new Scanner(myObj);
 
             while (myReader.hasNextLine()) {
