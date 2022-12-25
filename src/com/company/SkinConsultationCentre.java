@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +15,7 @@ public class SkinConsultationCentre extends JFrame {
     ArrayList<Consultation> consultations = new ArrayList<>();
     JPanel tabbedPanel = new JPanel();
 
-    public static void start(ArrayList<Doctor> doctorList) {
+    public static void start() {
         SkinConsultationCentre skinConsultationCentre = new SkinConsultationCentre();
         skinConsultationCentre.setVisible(true);
         skinConsultationCentre.setSize(1300, 700);
@@ -100,7 +101,7 @@ public class SkinConsultationCentre extends JFrame {
     }
 
     private JTable consultantsTable() {
-        ArrayList<String[]> doctorList = getFileContent();
+        ArrayList<String[]> doctorList = getFileContent("src/doctorsList.txt");
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -116,7 +117,10 @@ public class SkinConsultationCentre extends JFrame {
 
     private JPanel consultantsActionPanel() {
         JPanel panel = new JPanel();
+        JButton refresh = button("Refresh");
         JButton exit = button("   Exit   ");
+
+        panel.add(refresh);
         panel.add(exit);
 
         exit.addActionListener(e -> {
@@ -124,8 +128,13 @@ public class SkinConsultationCentre extends JFrame {
                     "Are you sure you want to close this window?", "Close Window?",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                System.exit(0);
+                dispose();
             }
+        });
+
+        refresh.addActionListener(e -> {
+            dispose();
+            start();
         });
 
         return panel;
@@ -204,7 +213,7 @@ public class SkinConsultationCentre extends JFrame {
                     valid = false;
                 } else*/
 
-                    if (!txtPatientDOB.getText().matches("\\d+(\\.\\d*)?")) {
+                if (!txtPatientDOB.getText().matches("\\d+(\\.\\d*)?")) {
                     txtPatientDOB.setText(" ");
                     valid = false;
                 } else if (!txtPatientMobileNo.getText().matches("\\d+(\\.\\d*)?")) {
@@ -318,9 +327,11 @@ public class SkinConsultationCentre extends JFrame {
         JPanel topPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
         JPanel subPanel = new JPanel();
+        JPanel miniPanel = new JPanel();
         JPanel firstPanel = new JPanel();
         JPanel secondPanel = new JPanel();
         JPanel thirdPanel = new JPanel();
+        JPanel fourthPanel = new JPanel();
 
         JLabel lblTop = new JLabel("Add Doctor Available Slots", JLabel.CENTER);
         lblTop.setFont(new Font("Cooper Black", Font.PLAIN, 22));
@@ -350,8 +361,8 @@ public class SkinConsultationCentre extends JFrame {
         secondPanel.add(update);
 
         subPanel.setLayout(new GridLayout(2, 1));
+        miniPanel.setLayout(new GridLayout(2, 1));
         firstPanel.setLayout(new GridLayout(5, 1));
-        //secondPanel.setLayout(new GridLayout(4, 1));
         thirdPanel.setLayout(new GridLayout(5, 1));
         subPanel.add(firstPanel);
         subPanel.add(secondPanel);
@@ -376,13 +387,18 @@ public class SkinConsultationCentre extends JFrame {
         thirdPanel.add(times);
         thirdPanel.add(cbTimes);
 
-        bottomPanel.add(thirdPanel);
+        JButton refresh = button("Refresh");
+        fourthPanel.add(refresh);
+
+        miniPanel.add(thirdPanel);
+        miniPanel.add(fourthPanel);
+        bottomPanel.add(miniPanel);
 
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-        topPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
-        bottomPanel.setBorder(BorderFactory.createLineBorder(Color.magenta));
+        bottomPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+        topPanel.setBorder(BorderFactory.createLineBorder(Color.magenta));
 
         panel.setLayout(new GridLayout(1, 2));
         panel.add(topPanel);
@@ -391,6 +407,11 @@ public class SkinConsultationCentre extends JFrame {
         btnReset1.addActionListener(e -> {
             cbDoctorNames1.removeAllItems();
             test2.removeAllItems();
+        });
+
+        refresh.addActionListener(e -> {
+            dispose();
+            start();
         });
 
         return panel;
@@ -551,10 +572,14 @@ public class SkinConsultationCentre extends JFrame {
     public JPanel savedConsultations() {
         JPanel panel = new JPanel();
 
-        ArrayList<String[]> savedConsultations = getFileContent();
-        String[][] data = savedConsultations.toArray(String[][]::new);
+        ArrayList<String[]> savedConsultations = getFileContent("src/consultations.txt");
+        //String[][] data = savedConsultations.toArray(String[][]::new);
+        String[][] data = {
+                {"Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes"},
+                {"Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes"},
+        };
         String[] column = {
-                "Consultation Id", "Doctor", "Patient Name", "MobileNumber", "Medical Licence Number", "Specialization"
+                "Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes"
         };
         JTable table = new JTable(data, column);
         table.setFillsViewportHeight(true);
@@ -574,8 +599,8 @@ public class SkinConsultationCentre extends JFrame {
         return panel;
     }
 
-    private ArrayList<String[]> getFileContent() {
-        File myObj = new File("src/doctorsList.txt");
+    private ArrayList<String[]> getFileContent(String pathName) {
+        File myObj = new File(pathName);
         ArrayList<String[]> doctorList = new ArrayList<>();
         Scanner myReader = null;
         try {

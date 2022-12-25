@@ -103,7 +103,8 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     @Override
     public void viewGui() {
         SkinConsultationCentre myFrame = new SkinConsultationCentre();
-        myFrame.start(doctorList);
+        //myFrame.start(doctorList);
+        myFrame.start();
     }
 
     private void initialise() {
