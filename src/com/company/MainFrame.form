@@ -105,7 +105,10 @@
             <preferred-size width="200" height="200"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-5098318"/>
+          <tabLayoutPolicy value="0"/>
+        </properties>
         <border type="none"/>
         <children>
           <grid id="81470" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

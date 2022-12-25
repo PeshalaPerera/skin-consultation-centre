@@ -20,6 +20,6 @@ public class Patient extends Person {
 
     public String toFormattedString() {
         return getName() + "," + getSurname() + "," + getMobileNo() + ","
-                + getDob() + "," + getId();
+                + getDob() + "," + getId() + "\n";
     }
 }
