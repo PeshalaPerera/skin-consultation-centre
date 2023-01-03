@@ -1,14 +1,15 @@
 package com.company;
 
-import com.sun.tools.javac.Main;
-
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class WestminsterSkinConsultationManager implements SkinConsultationManager {
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<Doctor> deletedList = new ArrayList<>();
     static Scanner scan = new Scanner(System.in);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public WestminsterSkinConsultationManager() {
         initialise();
@@ -21,7 +22,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
                 String name = getStringInput("Enter the Name");
                 String surname = getStringInput("Enter the Surname");
                 String mobileNo = getStringInput("Enter the Mobile Number");
-                String dob = getStringInput("Enter the Date Of Birth");
+                Date dob = getDateInput();
                 int medicalLicenceNo = getIntInput("Enter the Medical Licence Number");
                 String specialization = getStringInput("Enter the Specialization");
 
@@ -45,7 +46,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         checkNo(medicalLicenceNumber);
         try {
             boolean isDeleted = false;
-            for (Doctor doctor: doctorList) {
+            for (Doctor doctor : doctorList) {
                 if (doctor.getMedicalLicenceNo() == medicalLicenceNumber) {
                     doctorList.remove(doctor);
                     deletedList.add(doctor);
@@ -66,12 +67,8 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     public void printlist() {
         try {
             if (doctorList.size() > 0) {
-                doctorList.sort(new Comparator<Doctor>() {
-                    public int compare(Doctor d1, Doctor d2) {
-                        return d1.getSurname().toLowerCase().compareTo(d2.getSurname().toLowerCase());
-                    }
-                });
-                for (Doctor doctor: doctorList) {
+                doctorList.sort(Comparator.comparing(d -> d.getSurname().toLowerCase()));
+                for (Doctor doctor : doctorList) {
                     System.out.println(doctor);
                 }
             } else {
@@ -87,7 +84,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         try {
             Formatter formatter = new Formatter("src/doctorsList.txt");
             if (doctorList.size() > 0) {
-                for (Doctor doctor: doctorList) {
+                for (Doctor doctor : doctorList) {
                     formatter.format("%s", doctor.toFormattedString());
                 }
             } else {
@@ -102,9 +99,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
 
     @Override
     public void viewGui() {
-        SkinConsultationCentre myFrame = new SkinConsultationCentre();
-        //myFrame.start(doctorList);
-        myFrame.start();
+        SkinConsultationCentre.start();
     }
 
     private void initialise() {
@@ -114,7 +109,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
-                Doctor doctor = new Doctor(arr[0], arr[1], arr[2], arr[3], Integer.parseInt(arr[4]), arr[5]);
+                Doctor doctor = new Doctor(arr[0], arr[1], arr[2], dateFormat.parse(arr[3]), Integer.parseInt(arr[4]), arr[5]);
                 doctorList.add(doctor);
             }
             myReader.close();
@@ -128,7 +123,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         int getMedicalLicenceNo = number;
         try {
             boolean available = true;
-            for (Doctor doctor: doctorList) {
+            for (Doctor doctor : doctorList) {
                 if (doctor.getMedicalLicenceNo() == getMedicalLicenceNo) {
                     available = false;
                     break;
@@ -136,7 +131,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
             }
             if (available) {
                 System.out.println("Doctor holds the medical license number "
-                        + Integer.toString(getMedicalLicenceNo) +
+                        + getMedicalLicenceNo +
                         " not in the system !!!\n");
             }
         } catch (Exception exception) {
@@ -148,7 +143,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         try {
             System.out.println("Total Number of doctors in the centre : " + doctorList.size());
             System.out.println("Deleted doctor details...");
-            for (Doctor doctor: deletedList) {
+            for (Doctor doctor : deletedList) {
                 System.out.println(doctor);
             }
         } catch (Exception exception) {
@@ -159,6 +154,24 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     private String getStringInput(String message) {
         System.out.println("*** " + message + " : ");
         return scan.next().toLowerCase();
+    }
+
+    private Date getDateInput() {
+        Date date = new Date();
+        boolean isDate;
+        do {
+            System.out.println("*** " + "Enter the Date Of Birth" + " : ");
+            String dob = scan.next();
+            try {
+                date = dateFormat.parse(dob);
+                isDate = true;
+            } catch (ParseException e) {
+                System.out.println(dob + " is Invalid Date format!!! (hint:YYYY/MM/DD, DD/MM/YYYY)");
+                isDate = false;
+            }
+        } while (!(isDate));
+
+        return date;
     }
 
     private Integer getIntInput(String message) {

@@ -6,9 +6,9 @@ public class Person {
     private String name;
     private String surname;
     private String mobileNo;
-    private String dob;
+    private Date dob;
 
-    public Person(String name, String surname, String mobileNo, String dob) {
+    public Person(String name, String surname, String mobileNo, Date dob) {
         this.name = name;
         this.surname = surname;
         this.mobileNo = mobileNo;
@@ -39,11 +39,11 @@ public class Person {
         this.mobileNo = mobileNo;
     }
 
-    public String getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 }

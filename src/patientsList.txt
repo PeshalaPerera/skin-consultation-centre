@@ -1,8 +1,2 @@
-Peshala,Perera,14586,145863,35
-Peshala,Perera,14586,145863,35
-Venugi,Perera,3258,145896,3698
-Peshala,Perera,14586,145863,35
-Peshala,Perera,14586,145863,35
-Venugi,Perera,3258,145896,3698
-Ruwan ,Perera,586,14586,35
-sss,sss,sss,sss,11
+we,wer,014582,null,1458963
+ddd,dddd,014525,null,147

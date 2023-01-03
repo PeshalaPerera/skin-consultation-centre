@@ -6,7 +6,7 @@ public class Doctor extends Person {
     private int medicalLicenceNo;
     private String specialization;
 
-    public Doctor(String name, String surname, String mobileNo, String dob, int medicalLicenceNo, String specialization) {
+    public Doctor(String name, String surname, String mobileNo, Date dob, int medicalLicenceNo, String specialization) {
         super(name, surname, mobileNo, dob);
         this.medicalLicenceNo = medicalLicenceNo;
         this.specialization = specialization;

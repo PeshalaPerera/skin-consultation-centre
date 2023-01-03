@@ -5,7 +5,7 @@ import java.util.Date;
 public class Patient extends Person {
     private int id;
 
-    public Patient(String name, String surname, String mobileNo, String dob, int id) {
+    public Patient(String name, String surname, String mobileNo, Date dob, int id) {
         super(name, surname, mobileNo, dob);
         this.id = id;
     }
