@@ -4,15 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Formatter;
 import java.util.Scanner;
 
 public class Test extends JFrame {
     JPanel mainPanel = new JPanel();
+    JPanel welcomePanel = new JPanel();
     ArrayList<Patient> patientList = new ArrayList<>();
     ArrayList<Consultation> consultations = new ArrayList<>();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -26,19 +24,19 @@ public class Test extends JFrame {
 
     public Test() {
         super("Skin Consultation Centre");
-
+        JPanel mainTestPanel = new JPanel();
         BorderLayout layout = new BorderLayout();
         layout.setVgap(0);
         layout.setHgap(0);
-        mainPanel.setLayout(layout);
-        mainPanel.getInsets();
+        mainTestPanel.setLayout(layout);
+        mainTestPanel.getInsets();
 
         JPanel actionPanel = new JPanel();
         GridLayout gridLayout = new GridLayout();
         gridLayout.setVgap(0);
         gridLayout.setHgap(0);
         actionPanel.setLayout(gridLayout);
-        mainPanel.add(actionPanel);
+        mainTestPanel.add(actionPanel);
 
         JPanel consultantsPanel = consultantsPanel();
         JPanel menuPanel = menuPanel();
@@ -46,30 +44,76 @@ public class Test extends JFrame {
         actionPanel.add(menuPanel);
         actionPanel.add(consultantsPanel);
 
-        add(mainPanel, BorderLayout.CENTER);
+        add(mainTestPanel, BorderLayout.CENTER);
     }
 
     private JPanel consultantsPanel() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
+        JPanel mainConsultantsPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
+
+        mainConsultantsPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
 
         JScrollPane sp = new JScrollPane(consultantsTable());
 
         BorderLayout layoutBl = new BorderLayout();
-        mainPanel.setLayout(layoutBl);
+        mainConsultantsPanel.setLayout(layoutBl);
 
-        //mainPanel.add(heading(), BorderLayout.NORTH);
-        mainPanel.add(sp, BorderLayout.CENTER);
+        JButton exit = new JButton("Exit");
+        exit.addActionListener(e -> {
+            if (JOptionPane.showConfirmDialog(mainPanel,
+                    "Are you sure you want to close this window?", "Close Window?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                dispose();
+            }
+        });
 
-        return mainPanel;
+        JButton refresh = new JButton("Refresh");
+        refresh.addActionListener(e -> {
+            dispose();
+            //main();
+        });
+
+        bottomPanel.add(refresh, BorderLayout.WEST);
+        bottomPanel.add(exit, BorderLayout.EAST);
+
+        mainConsultantsPanel.add(sp, BorderLayout.CENTER);
+        mainConsultantsPanel.add(exit, BorderLayout.SOUTH);
+
+        return mainConsultantsPanel;
+    }
+
+    private JButton menu() {
+        JButton menu = new JButton("MENU");
+        menu.addActionListener(e -> {
+            mainPanel.removeAll();
+            mainPanel.repaint();
+            mainPanel.revalidate();
+
+            mainPanel.add(welcomePanel);
+            mainPanel.repaint();
+            mainPanel.revalidate();
+        });
+
+        return menu;
     }
 
     private JPanel menuPanel() {
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        JPanel welcomePanel = new JPanel();
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
+        JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+
+        panel1.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 20));
+        panel1.setBackground(new Color(255, 255, 255));
+
+        panel2.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 20));
+        panel2.setBackground(new Color(64, 182, 0));
+
+        panel3.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 20));
+        panel3.setBackground(new Color(227, 4, 69));
+        panel3.add(new JButton());
+
         welcomePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
         welcomePanel.setBackground(new Color(0, 119, 182));
 
@@ -83,52 +127,117 @@ public class Test extends JFrame {
 
         JPanel subPanel = new JPanel();
         JButton btn1  = new JButton("Consultations");
-        subPanel.add(btn1, BorderLayout.LINE_START);
+        subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
         JButton btn2  = new JButton("Doctor Availability");
-        subPanel.add(btn2, BorderLayout.CENTER);
+        subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
         JButton btn3  = new JButton("Add consultation");
-        subPanel.add(btn3, BorderLayout.LINE_END);
+        subPanel.add(new JPanel().add(btn3), BorderLayout.LINE_END);
 
         welcomePanel.add(lbl, BorderLayout.NORTH);
         welcomePanel.add(lbl2, BorderLayout.CENTER);
         welcomePanel.add(subPanel, BorderLayout.SOUTH);
 
-        //getContentPane().add(mainPanel);
-        //getContentPane().add(welcomePanel);
-        //welcomePanel.setBounds(mainPanel.getBounds());
+        mainPanel.setLayout(new GridLayout(1, 1));
 
-        /*mainPanel.setBounds(0, 0, 100, 100000);
-        welcomePanel.setBounds(0, 0, 100, 100000);
+        JButton menuBtn = new JButton("Menu");
+        menuBtn.addActionListener(e -> {
+            mainPanel.removeAll();
+            mainPanel.repaint();
+            mainPanel.revalidate();
 
-        getContentPane().add(mainPanel);
-        getContentPane().add(welcomePanel);*/
+            mainPanel.add(welcomePanel);
+            mainPanel.repaint();
+            mainPanel.revalidate();
+        });
 
+        panel1.add(menuBtn);
+        panel2.add(menuBtn);
+        panel3.add(menuBtn);
         mainPanel.add(welcomePanel);
 
+        btn1.addActionListener(e -> {
+            mainPanel.removeAll();
+            mainPanel.repaint();
+            mainPanel.revalidate();
 
-
-        /*btn1.addActionListener(e -> {
             mainPanel.add(panel1);
+            mainPanel.repaint();
+            mainPanel.revalidate();
+
+            JPanel addConsultation = addConsultation();
+            panel1.add(addConsultation);
         });
 
         btn2.addActionListener(e -> {
+            mainPanel.removeAll();
+            mainPanel.repaint();
+            mainPanel.revalidate();
+
             mainPanel.add(panel2);
+            mainPanel.repaint();
+            mainPanel.revalidate();
+
+            JPanel doctorAvailability = doctorAvailability();
+            panel2.add(doctorAvailability);
         });
 
         btn3.addActionListener(e -> {
-            mainPanel.add(panel3);
-        });*/
+            mainPanel.removeAll();
+            mainPanel.repaint();
+            mainPanel.revalidate();
 
-        return welcomePanel;
+            mainPanel.add(panel3);
+            mainPanel.repaint();
+            mainPanel.revalidate();
+
+            JPanel savedConsultations = savedConsultations();
+            panel3.add(savedConsultations());
+        });
+
+        return mainPanel;
     }
 
-    private JLabel heading() {
-        JLabel lbl = new JLabel("Consultants", JLabel.CENTER);
-        lbl.setFont(new Font("Arial", Font.BOLD, 38));
-        lbl.setForeground(new Color(0, 119, 182));
-        return lbl;
+    private JPanel addConsultation() {
+        JPanel mainAddConsultantPanel = new JPanel();
+
+        return mainAddConsultantPanel;
+    }
+
+    private JPanel doctorAvailability() {
+        JPanel mainDoctorPanel = new JPanel();
+
+        return mainDoctorPanel;
+    }
+
+    private JPanel savedConsultations() {
+        JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        mainPanel.setBackground(Color.cyan);
+
+        ArrayList<String[]> doctorList = getFileContent("src/consultations.txt");
+        String[][] data = doctorList.toArray(String[][]::new);
+        String[] column = {
+                "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
+        };
+        JTable table = new JTable(data, column);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
+        table.getTableHeader().setOpaque(false);
+        table.getTableHeader().setBackground(new Color(0, 119, 182));
+        table.getTableHeader().setForeground(new Color(202, 240, 248));
+        table.getTableHeader().setSize(40, 40);
+        table.setSelectionBackground(new Color(0, 180, 216));
+        table.setGridColor(new Color(2, 62, 138, 255));
+        table.setRowHeight(40);
+        table.setFont(new Font("Arial", Font.PLAIN, 15));
+        table.setAutoCreateRowSorter(true);
+        table.setBackground(new Color(202, 240, 248));
+        table.setShowVerticalLines(true);
+
+        JScrollPane sp = new JScrollPane(table);
+        mainPanel.add(sp);
+
+        return mainPanel;
     }
 
     private JTable consultantsTable() {
@@ -151,49 +260,6 @@ public class Test extends JFrame {
         table.setBackground(new Color(202, 240, 248));
         table.setShowVerticalLines(true);
         return table;
-    }
-
-    private JButton button(String text) {
-        JButton btn = new JButton(text);
-        btn.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        btn.setFont(new Font("Arial", Font.BOLD, 20));
-        btn.setForeground(new Color(0, 202, 240, 248));
-        btn.setBackground(new Color(178, 52, 178));
-        return btn;
-    }
-
-    private JLabel label(String text) {
-        JLabel label = new JLabel(text);
-        label.setBounds(100, 100, 300, 30);
-        label.setBorder(BorderFactory.createEmptyBorder(20, 5, 20, 5));
-        label.setFont(new Font("Arial", Font.PLAIN, 20));
-        return label;
-    }
-
-    private JTextField textField() {
-        JTextField txtField = new JTextField();
-        txtField.setBackground(Color.pink);
-        txtField.setForeground(Color.blue);
-        txtField.setFont(new Font("Arial", Font.BOLD, 20));
-        txtField.setMargin(new Insets(10, 10, 10, 10));
-        return txtField;
-    }
-
-    private String savePatient(String fileName) {
-        String message;
-        try {
-            Formatter formatter = new Formatter(fileName);
-            if (patientList.size() > 0) {
-                for (Patient p : patientList) {
-                    formatter.format("%s", p.toFormattedString());
-                }
-            }
-            formatter.close();
-            message = "success";
-        } catch (Exception exception) {
-            message = "error";
-        }
-        return message;
     }
 
     private ArrayList<String[]> getFileContent(String pathName) {
