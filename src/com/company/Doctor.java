@@ -6,7 +6,7 @@ public class Doctor extends Person {
     private int medicalLicenceNo;
     private String specialization;
 
-    public Doctor(String name, String surname, String mobileNo, Date dob, int medicalLicenceNo, String specialization) {
+    public Doctor(String name, String surname, String mobileNo, String dob, int medicalLicenceNo, String specialization) {
         super(name, surname, mobileNo, dob);
         this.medicalLicenceNo = medicalLicenceNo;
         this.specialization = specialization;
@@ -31,11 +31,11 @@ public class Doctor extends Person {
     @Override
     public String toString() {
         return "Doctor{" +
-                ", name='" + getName() + '\'' +
+                "name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", dob='" + getDob() + '\'' +
                 ", mobileNo='" + getMobileNo() + '\'' +
-                "medicalLicenceNo=" + medicalLicenceNo +
+                " medicalLicenceNo=" + medicalLicenceNo +
                 ", specialization='" + specialization + '\'' +
                 '}';
     }
@@ -45,7 +45,11 @@ public class Doctor extends Person {
                 + getMobileNo() + "," + getMedicalLicenceNo() + "," +  getSpecialization() + "\n";
     }
 
-    public String identity() {
-        return getMedicalLicenceNo() + "-" + getName() + " " + getSurname() + "\n";
-    }
+    /*public String identity() {
+        String[] names = namesList.toArray(new String[0]);
+        return names;
+    }*/
+
+//    {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"}
+
 }

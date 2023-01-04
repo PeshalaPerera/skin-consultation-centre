@@ -1,14 +1,12 @@
 package com.company;
 
-import java.util.Date;
-
 public class Person {
     private String name;
     private String surname;
     private String mobileNo;
-    private Date dob;
+    private String dob;
 
-    public Person(String name, String surname, String mobileNo, Date dob) {
+    public Person(String name, String surname, String mobileNo, String dob) {
         this.name = name;
         this.surname = surname;
         this.mobileNo = mobileNo;
@@ -39,11 +37,11 @@ public class Person {
         this.mobileNo = mobileNo;
     }
 
-    public Date getDob() {
-        return dob;
+    public String getDob() {
+        return String.valueOf(dob);
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 }

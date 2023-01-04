@@ -1,0 +1,1 @@
+Consultation{doctor=Doctor{, name='deen', surname='miller', dob='222', mobileNo='222' medicalLicenceNo=222, specialization='bb'}, patient=Patient{, name='ccc', surname='ccc', mobileNo='1478', dob='01-1-2023 01:27:09', id='14785'}, time=Wed Jan 04 13:40:43 IST 2023, cost=3697400.0, notes='147896'}

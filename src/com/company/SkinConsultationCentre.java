@@ -1,15 +1,17 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Scanner;
+
+import static java.lang.Integer.parseInt;
 
 public class SkinConsultationCentre extends JFrame {
     JPanel mainPanel = new JPanel();
@@ -17,7 +19,9 @@ public class SkinConsultationCentre extends JFrame {
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<Consultation> consultations = new ArrayList<>();
     JPanel tabbedPanel = new JPanel();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+    Date date = new Date();
+    String pattern = "yyyy-MM-dd";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
     public static void start() {
         SkinConsultationCentre skinConsultationCentre = new SkinConsultationCentre();
@@ -169,9 +173,11 @@ public class SkinConsultationCentre extends JFrame {
         topPanel.add(txtPatientSurname);
 
         JLabel lblPatientDOB = label("Date Of Birth");
-        JTextField txtPatientDOB = textField();
+        JLabel lblPatientDOBVal = new JLabel();
+        JButton btnDate = new JButton("Date");
         topPanel.add(lblPatientDOB);
-        topPanel.add(txtPatientDOB);
+        topPanel.add(lblPatientDOBVal);
+        topPanel.add(btnDate);
 
         JLabel lblPatientMobileNo = label("Mobile Number");
         JTextField txtPatientMobileNo = textField();
@@ -191,6 +197,11 @@ public class SkinConsultationCentre extends JFrame {
 
         JButton btnReset = button("Reset");
         JButton btnAdd = button("Add Patient");
+
+        btnDate.addActionListener(e -> {
+            DatePicker datePicker = new DatePicker(this);
+            lblPatientDOBVal.setText(datePicker.setPickedDate());
+        });
 
         bottomPanel.add(btnReset);
         bottomPanel.add(btnAdd);
@@ -212,15 +223,7 @@ public class SkinConsultationCentre extends JFrame {
                 }
 
                 boolean valid = true;
-                //!txtPatientNIC.getInputVerifier().verify(txtPatientNIC)
-                /*if (txtPatientDOB.getText().isBlank() && txtPatientMobileNo.getText().isBlank() && txtPatientNIC.getText().isBlank()) {
-                    valid = false;
-                } else*/
-
-                if (!txtPatientDOB.getText().matches("\\d+(\\.\\d*)?")) {
-                    txtPatientDOB.setText(" ");
-                    valid = false;
-                } else if (!txtPatientMobileNo.getText().matches("\\d+(\\.\\d*)?")) {
+                if (!txtPatientMobileNo.getText().matches("\\d+(\\.\\d*)?")) {
                     txtPatientMobileNo.setText(" ");
                     valid = false;
                 } else if (!txtPatientNIC.getText().matches("\\d+(\\.\\d*)?")) {
@@ -231,14 +234,9 @@ public class SkinConsultationCentre extends JFrame {
                 if (valid) {
                     String txtPatientNameValue = txtPatientName.getText();
                     String txtPatientSurnameValue = txtPatientSurname.getText();
-                    Date txtPatientDOBValue = null;
-                    try {
-                        txtPatientDOBValue = dateFormat.parse(String.valueOf(txtPatientDOB.getText()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    String txtPatientDOBValue = lblPatientDOBVal.getText();
                     String txtPatientMobileNoValue = txtPatientMobileNo.getText();
-                    int txtPatientNICValue = Integer.parseInt(txtPatientNIC.getText());
+                    int txtPatientNICValue = parseInt(txtPatientNIC.getText());
 
                     Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
                     patientList.add(patient);
@@ -262,7 +260,7 @@ public class SkinConsultationCentre extends JFrame {
         btnReset.addActionListener(e -> {
             txtPatientName.setText("");
             txtPatientSurname.setText("");
-            txtPatientDOB.setText("");
+            lblPatientDOBVal.setText("");
             txtPatientMobileNo.setText("");
             txtPatientNIC.setText("");
             lblMessage.setText("");
@@ -305,25 +303,36 @@ public class SkinConsultationCentre extends JFrame {
         return message;
     }
 
+    private String saveConsultation(String fileName) {
+        String message;
+        try {
+            Formatter formatter = new Formatter(fileName);
+            if (consultations.size() > 0) {
+                for (Consultation consultation : consultations) {
+                    formatter.format("%s", consultation.toString());
+                }
+            }
+            formatter.close();
+            message = "success";
+        } catch (Exception exception) {
+            message = "error";
+        }
+        return message;
+    }
+
     private String initPatient() {
         String status;
         try {
             File myObj = new File("src/patientsList.txt");
-            Scanner myReader = null;
-            try {
-                myReader = new Scanner(myObj);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            while (true) {
-                assert myReader != null;
-                if (!myReader.hasNextLine()) break;
+            Scanner myReader = new Scanner(myObj);
+            patientList.clear();
+            while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
-                Patient initPatient = new Patient(arr[0], arr[1], arr[2], dateFormat.parse(arr[3]), Integer.parseInt(arr[4]));
+                Patient initPatient = new Patient(arr[0], arr[1], arr[2], arr[3], parseInt(arr[4]));
                 patientList.add(initPatient);
-                //System.out.println(patientList);
             }
+            System.out.println(patientList);
             myReader.close();
             status = "success";
         } catch (Exception exception) {
@@ -391,7 +400,8 @@ public class SkinConsultationCentre extends JFrame {
         thirdPanel.add(cbDoctor);
 
         JLabel times = label("Available Time Slots");
-        String[] doctors2 = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
+//        String[] doctors2 = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
+        String[] doctors2 = doctorDropdown();
         JComboBox cbTimes = new JComboBox(doctors2);
 
         thirdPanel.add(times);
@@ -432,11 +442,6 @@ public class SkinConsultationCentre extends JFrame {
         JPanel topPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
 
-        JLabel lblConsultationId = label("Consultation Id");
-        JTextField txtConsultationId = textField();
-        topPanel.add(lblConsultationId);
-        topPanel.add(txtConsultationId);
-
         JLabel lblPatientName = label("Patient Name");
         JTextField txtPatientName = textField();
         topPanel.add(lblPatientName);
@@ -452,15 +457,38 @@ public class SkinConsultationCentre extends JFrame {
         topPanel.add(lblConsultationHours);
         topPanel.add(txtConsultationHours);
 
-        JLabel lblCost = label("Cost");
         JTextField txtCost = textField();
-        topPanel.add(lblCost);
-        topPanel.add(txtCost);
 
         JLabel lblNotes = label("Notes");
         JTextField txtNotes = textField();
         topPanel.add(lblNotes);
         topPanel.add(txtNotes);
+
+        JButton upload = new JButton("Upload");
+        JLabel jLabelImage = new JLabel();
+        topPanel.add(upload);
+        topPanel.add(jLabelImage);
+
+        upload.addActionListener(ae -> {
+            // TODO add your handling code here:
+            JFileChooser browseImageFile = new JFileChooser();
+            //Filter image extensions
+            FileNameExtensionFilter fnef = new FileNameExtensionFilter("IMAGES", "png", "jpg", "jpeg");
+            browseImageFile.addChoosableFileFilter(fnef);
+            int showOpenDialogue = browseImageFile.showOpenDialog(null);
+
+            if (showOpenDialogue == JFileChooser.APPROVE_OPTION) {
+                File selectedImageFile = browseImageFile.getSelectedFile();
+                String selectedImagePath = selectedImageFile.getAbsolutePath();
+                JOptionPane.showMessageDialog(null, selectedImagePath);
+                //Display image on jlable
+                ImageIcon ii = new ImageIcon(selectedImagePath);
+                //Resize image to fit jlabel
+                Image image = ii.getImage().getScaledInstance(jLabelImage.getWidth(), jLabelImage.getHeight(), Image.SCALE_SMOOTH);
+
+                jLabelImage.setIcon(new ImageIcon(image));
+            }
+        });
 
         JLabel lblMessage = new JLabel();
         topPanel.add(lblMessage);
@@ -493,24 +521,18 @@ public class SkinConsultationCentre extends JFrame {
                     lblMessage.setText("An Error Occurred!!!");
                 }
 
-                String txtConsultationIdValue = txtConsultationId.getText();
                 String txtDoctorNameValue = txtDoctorName.getText();
                 String txtPatientNameValue = txtPatientName.getText();
-                String txtConsultationHoursValue = txtConsultationHours.getText();
+                Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
                 Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
                 txtCost.setText(String.valueOf(consultationCost));
                 double txtCostValue = Double.parseDouble(txtCost.getText());
                 String txtNotesValue = txtNotes.getText();
 
-                Consultation consultation = null;
-                try {
-                    consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), getPatientByName(txtPatientNameValue, patientList), dateFormat.parse(txtConsultationHoursValue), txtCostValue, txtNotesValue);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), getPatientByName(txtPatientNameValue, patientList), new Date(), txtCostValue, txtNotesValue);
                 consultations.add(consultation);
 
-                String message = savePatient("src/consultations.txt");
+                String message = saveConsultation("src/consultations.txt");
                 if (message.equals("success")) {
                     showMessageDialog("Consultation Added Successfully...");
                     btnReset.doClick();
@@ -523,7 +545,6 @@ public class SkinConsultationCentre extends JFrame {
         });
 
         btnReset.addActionListener(e -> {
-            txtConsultationId.setText("");
             txtPatientName.setText("");
             txtDoctorName.setText("");
             txtConsultationHours.setText("");
@@ -532,12 +553,21 @@ public class SkinConsultationCentre extends JFrame {
         });
 
         btnRandom.addActionListener(e -> {
-            String[] doctorNamesList = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
+            initDoctor();
+            /*String[] doctorNamesList = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
             ArrayList indexArr = new ArrayList();
-            for (int i = 0; i < doctorNamesList.length; i++) {
-                indexArr.add(i);
+            for (Doctor doctor:doctorList) {
+
+            }*/
+            System.out.println(doctorList);
+            if (doctorList.isEmpty()) {
+                System.out.println("Error");
+            } else {
+                int randomIndex = (int) (Math.random() * doctorList.size());
+                System.out.println("Random Doctor: " + doctorList.get(randomIndex));
+                /*txtDoctorName.setText(doctorNamesList[1]);*/
             }
-            txtDoctorName.setText(doctorNamesList[1]);
+
         });
 
         btnAddNew.addActionListener(e -> {
@@ -550,13 +580,13 @@ public class SkinConsultationCentre extends JFrame {
         return panel;
     }
 
-    private Double costCalculator(String hours, String name) {
+    private Double costCalculator(Integer hours, String name) {
         Integer cost;
         Patient patientAvailable = getPatientByName(name, patientList);
-        if (patientAvailable == null) {
-            cost = Integer.parseInt(hours) * 15;
+        if (null == patientAvailable) {
+            cost = hours * 15;
         } else {
-            cost = Integer.parseInt(hours) * 25;
+            cost = hours * 25;
         }
         return Double.parseDouble(String.valueOf(cost));
     }
@@ -579,22 +609,14 @@ public class SkinConsultationCentre extends JFrame {
             }
             myReader.close();
             status = "success";
-
-            File myObj2 = new File("src/doctorsList.txt");
-            Scanner myReader2 = new Scanner(myObj);
-            while (myReader2.hasNextLine()) {
-                String data = myReader2.nextLine();
-                String[] arr = data.split(",");
-                Doctor doctor = new Doctor(arr[0], arr[1], arr[2], dateFormat.parse(arr[3]), Integer.parseInt(arr[4]), arr[5]);
-                doctorList.add(doctor);
-            }
-            myReader2.close();
-            System.out.println("Doctors List Initialised!\n");
+            initDoctor();
+            initPatient();
         } catch (Exception exception) {
             status = "error";
         }
         return status;
     }
+
 
     public JPanel savedConsultations() {
         JPanel panel = new JPanel();
@@ -666,7 +688,7 @@ public class SkinConsultationCentre extends JFrame {
     }
 
     private Patient getPatientByName(String name, ArrayList<Patient> patientList) {
-        for (Patient patient:patientList) {
+        for (Patient patient : patientList) {
             if (patient.getName().equals(name)) {
                 return patient;
             }
@@ -675,11 +697,35 @@ public class SkinConsultationCentre extends JFrame {
     }
 
     private Doctor getDoctorByName(String name, ArrayList<Doctor> doctorList) {
-        for (Doctor doctor:doctorList) {
+        for (Doctor doctor : doctorList) {
             if (doctor.getName().equals(name)) {
                 return doctor;
             }
         }
         return null;
     }
+
+    private void initDoctor() {
+        try {
+            File myObj = new File("src/doctorsList.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                String[] arr = data.split(",");
+                Doctor doctor = new Doctor(arr[0], arr[1], arr[2], arr[3], Integer.parseInt(arr[4]), arr[5]);
+                doctorList.add(doctor);
+            }
+            System.out.println(doctorList);
+            myReader.close();
+            System.out.println("Doctors List Initialised!\n");
+        } catch (Exception exception) {
+            System.out.println("Could not load the data!!!");
+        }
+    }
+
+    private String[] doctorDropdown() {
+        String[] names = doctorList.toArray(new String[1]);
+        return names;
+    }
+
 }

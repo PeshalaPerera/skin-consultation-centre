@@ -22,7 +22,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
                 String name = getStringInput("Enter the Name");
                 String surname = getStringInput("Enter the Surname");
                 String mobileNo = getStringInput("Enter the Mobile Number");
-                Date dob = getDateInput();
+                String dob = getStringInput("Enter the date of birth");
                 int medicalLicenceNo = getIntInput("Enter the Medical Licence Number");
                 String specialization = getStringInput("Enter the Specialization");
 
@@ -109,7 +109,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
-                Doctor doctor = new Doctor(arr[0], arr[1], arr[2], dateFormat.parse(arr[3]), Integer.parseInt(arr[4]), arr[5]);
+                Doctor doctor = new Doctor(arr[0], arr[1], arr[2], arr[3], Integer.parseInt(arr[4]), arr[5]);
                 doctorList.add(doctor);
             }
             myReader.close();
@@ -156,8 +156,9 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         return scan.next().toLowerCase();
     }
 
-    private Date getDateInput() {
-        Date date = new Date();
+/*
+    private String getDateInput() {
+        String date = new Date();
         boolean isDate;
         do {
             System.out.println("*** " + "Enter the Date Of Birth" + " : ");
@@ -173,6 +174,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
 
         return date;
     }
+*/
 
     private Integer getIntInput(String message) {
         int input = 0;

@@ -56,4 +56,20 @@ public class Consultation {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+    @Override
+    public String toString() {
+        return "Consultation{" +
+                "doctor=" + doctor +
+                ", patient=" + patient +
+                ", time=" + time +
+                ", cost=" + cost +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
+
+    public String toFormattedString() {
+        return getDoctor() + "," + getPatient() + "," + getTime() + ","
+                + getCost() + "," + getNotes() + "\n";
+    }
 }

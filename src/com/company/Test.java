@@ -51,7 +51,7 @@ public class Test extends JFrame {
 
     private JPanel consultantsPanel() {
         JPanel mainPanel = new JPanel();
-        mainPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        mainPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
 
         JScrollPane sp = new JScrollPane(consultantsTable());
 
@@ -65,22 +65,63 @@ public class Test extends JFrame {
     }
 
     private JPanel menuPanel() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
-        mainPanel.setBackground(new Color(0, 119, 182));
+        JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        JPanel welcomePanel = new JPanel();
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        JPanel panel3 = new JPanel();
+        welcomePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
+        welcomePanel.setBackground(new Color(0, 119, 182));
 
         JLabel lbl = new JLabel("SKIN CONSULTATION CENTRE");
         lbl.setForeground(new Color(202, 240, 248));
-        lbl.setFont(new Font("Calibri", Font.BOLD, 38));
+        lbl.setFont(new Font("Calibri", Font.BOLD, 42));
+
+        JLabel lbl2 = new JLabel("SKIN CONSULTATION CENTRE");
+        lbl2.setForeground(new Color(202, 240, 248));
+        lbl2.setFont(new Font("Calibri", Font.BOLD, 38));
 
         JPanel subPanel = new JPanel();
         JButton btn1  = new JButton("Consultations");
-        subPanel.add(btn1, BorderLayout.WEST);
+        subPanel.add(btn1, BorderLayout.LINE_START);
 
-        mainPanel.add(lbl, BorderLayout.NORTH);
-        mainPanel.add(btn1, BorderLayout.CENTER);
+        JButton btn2  = new JButton("Doctor Availability");
+        subPanel.add(btn2, BorderLayout.CENTER);
 
-        return mainPanel;
+        JButton btn3  = new JButton("Add consultation");
+        subPanel.add(btn3, BorderLayout.LINE_END);
+
+        welcomePanel.add(lbl, BorderLayout.NORTH);
+        welcomePanel.add(lbl2, BorderLayout.CENTER);
+        welcomePanel.add(subPanel, BorderLayout.SOUTH);
+
+        //getContentPane().add(mainPanel);
+        //getContentPane().add(welcomePanel);
+        //welcomePanel.setBounds(mainPanel.getBounds());
+
+        /*mainPanel.setBounds(0, 0, 100, 100000);
+        welcomePanel.setBounds(0, 0, 100, 100000);
+
+        getContentPane().add(mainPanel);
+        getContentPane().add(welcomePanel);*/
+
+        mainPanel.add(welcomePanel);
+
+
+
+        /*btn1.addActionListener(e -> {
+            mainPanel.add(panel1);
+        });
+
+        btn2.addActionListener(e -> {
+            mainPanel.add(panel2);
+        });
+
+        btn3.addActionListener(e -> {
+            mainPanel.add(panel3);
+        });*/
+
+        return welcomePanel;
     }
 
     private JLabel heading() {
