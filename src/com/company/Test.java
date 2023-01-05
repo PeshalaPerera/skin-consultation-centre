@@ -17,7 +17,8 @@ public class Test extends JFrame {
     ArrayList<Patient> patientList = new ArrayList<>();
     ArrayList<Consultation> consultations = new ArrayList<>();
     ArrayList<Doctor> doctorList = new ArrayList<>();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+    String today = dateFormat.format(new Date());
 
     public static void main(String[] args) {
         Test skinConsultationCentre = new Test();
@@ -55,7 +56,7 @@ public class Test extends JFrame {
         JPanel mainConsultantsPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
 
-      mainConsultantsPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 180, 216), 10));
+        mainConsultantsPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 180, 216), 10));
 
         JScrollPane sp = new JScrollPane(consultantsTable());
 
@@ -83,7 +84,7 @@ public class Test extends JFrame {
         bottomPanel.add(mainMenu);
         bottomPanel.add(refresh);
         bottomPanel.add(exit);
-;
+        ;
         mainConsultantsPanel.add(sp, BorderLayout.CENTER);
         mainConsultantsPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -119,16 +120,16 @@ public class Test extends JFrame {
 
         JPanel subPanel = new JPanel();
         Icon icon1 = new ImageIcon("src/img1.PNG");
-        JButton btn1  = new JButton(icon1);
+        JButton btn1 = new JButton(icon1);
         btn1.setBorder(new EmptyBorder(50, 50, 50, 50));
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
         Icon icon2 = new ImageIcon("src/img2.PNG");
-        JButton btn2  = new JButton(icon2);
+        JButton btn2 = new JButton(icon2);
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
         Icon icon3 = new ImageIcon("src/img3.PNG");
-        JButton btn3  = new JButton(icon3);
+        JButton btn3 = new JButton(icon3);
         subPanel.add(new JPanel().add(btn3), BorderLayout.LINE_END);
 
         welcomePanel.add(lbl, BorderLayout.NORTH);
@@ -425,7 +426,7 @@ public class Test extends JFrame {
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 String status = initConsultations("src/consultations.txt");
                 if (status == "error") {
-                    lblMessage.setText("An Error Occurred!!!");
+                    lblMessage.setText("Could not load the data!!!");
                 }
 
                 initDoctor();
@@ -557,7 +558,7 @@ public class Test extends JFrame {
                 String[] arr = data.split(",");
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), SimpleDateFormat.getDateInstance().parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), dateFormat.parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
                 consultations.add(initConsultation);
             }
             myReader.close();
@@ -693,6 +694,6 @@ public class Test extends JFrame {
     }
 
     private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
-        return doctorList.stream().map(doctor -> doctor.getName() + "-" + doctor.getMedicalLicenceNo()).toArray(String[]::new);
+        return doctorList.stream().map(doctor -> doctor.getName()).toArray(String[]::new);
     }
 }
