@@ -6,10 +6,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
@@ -358,9 +356,10 @@ public class SkinConsultationCentre extends JFrame {
 
         topPanel.add(lblTop);
 
+        initDoctor();
         JLabel lblDoctorName1 = label("Doctor Name");
         String[] doctorNamesList1 = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
-        JComboBox cbDoctorNames1 = new JComboBox(doctorNamesList1);
+        JComboBox<String> cbDoctorNames1 = new JComboBox<>(doctorDropdown(doctorList));
         firstPanel.add(lblDoctorName1);
         firstPanel.add(cbDoctorNames1);
 
@@ -401,11 +400,11 @@ public class SkinConsultationCentre extends JFrame {
 
         JLabel times = label("Available Time Slots");
 //        String[] doctors2 = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
-        String[] doctors2 = doctorDropdown();
-        JComboBox cbTimes = new JComboBox(doctors2);
+        //String[] doctors2 = doctorDropdown();
+        //JComboBox cbTimes = new JComboBox(doctors2);
 
         thirdPanel.add(times);
-        thirdPanel.add(cbTimes);
+        //thirdPanel.add(cbTimes);
 
         JButton refresh = button("Refresh");
         fourthPanel.add(refresh);
@@ -595,17 +594,14 @@ public class SkinConsultationCentre extends JFrame {
         String status;
         try {
             File myObj = new File(pathName);
-            Scanner myReader = null;
-            try {
-                myReader = new Scanner(myObj);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
-                //Consultation initConsultation = new Consultation(arr[0], arr[1], arr[2], arr[3], arr[4]);
-                //consultations.add(initConsultation);
+                int medicalLicenseNumber = Integer.parseInt(arr[0]);
+                int patientId = Integer.parseInt(arr[1]);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), SimpleDateFormat.getDateInstance().parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
+                consultations.add(initConsultation);
             }
             myReader.close();
             status = "success";
@@ -696,9 +692,32 @@ public class SkinConsultationCentre extends JFrame {
         return null;
     }
 
+    private Patient getPatientById(int id, ArrayList<Patient> patientList) {
+        for (Patient patient : patientList) {
+            if (patient.getId() == id) {
+                return patient;
+            }
+        }
+        return null;
+    }
+
     private Doctor getDoctorByName(String name, ArrayList<Doctor> doctorList) {
         for (Doctor doctor : doctorList) {
             if (doctor.getName().equals(name)) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
+    //    String[] doctorNamesList1 = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
+    private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
+        return doctorList.stream().map(doctor -> doctor.getName() + "-" + doctor.getMedicalLicenceNo()).toArray(String[]::new);
+    }
+
+    private Doctor getDoctorByMedicalLicenceNo(int medicalLicenceNo, ArrayList<Doctor> doctorList) {
+        for (Doctor doctor : doctorList) {
+            if (doctor.getMedicalLicenceNo() == medicalLicenceNo) {
                 return doctor;
             }
         }
@@ -721,11 +740,6 @@ public class SkinConsultationCentre extends JFrame {
         } catch (Exception exception) {
             System.out.println("Could not load the data!!!");
         }
-    }
-
-    private String[] doctorDropdown() {
-        String[] names = doctorList.toArray(new String[1]);
-        return names;
     }
 
 }

@@ -59,13 +59,11 @@ public class Consultation {
 
     @Override
     public String toString() {
-        return "Consultation{" +
-                "doctor=" + doctor +
-                ", patient=" + patient +
-                ", time=" + time +
-                ", cost=" + cost +
-                ", notes='" + notes + '\'' +
-                '}';
+        return  doctor.getMedicalLicenceNo() + "," +
+                patient.getId() + "," +
+                time + "," +
+                cost + "," +
+                notes;
     }
 
     public String toFormattedString() {

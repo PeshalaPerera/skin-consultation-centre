@@ -7,10 +7,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -121,16 +118,16 @@ public class Test extends JFrame {
         lbl2.setFont(new Font("Calibri", Font.BOLD, 38));
 
         JPanel subPanel = new JPanel();
-        Icon icon1 = new ImageIcon("src/assets/img1.PNG");
+        Icon icon1 = new ImageIcon("src/img1.PNG");
         JButton btn1  = new JButton(icon1);
         btn1.setBorder(new EmptyBorder(50, 50, 50, 50));
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
-        Icon icon2 = new ImageIcon("src/assets/img2.PNG");
+        Icon icon2 = new ImageIcon("src/img2.PNG");
         JButton btn2  = new JButton(icon2);
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
-        Icon icon3 = new ImageIcon("src/assets/img3.PNG");
+        Icon icon3 = new ImageIcon("src/img3.PNG");
         JButton btn3  = new JButton(icon3);
         subPanel.add(new JPanel().add(btn3), BorderLayout.LINE_END);
 
@@ -288,7 +285,7 @@ public class Test extends JFrame {
         JPanel topPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
 
-        topPanel.setBorder(new EmptyBorder(50, 50, 50, 50));
+        topPanel.setBorder(new EmptyBorder(50, 50, 0, 50));
 
         JLabel mainHeading = mainHeading("Add Consultation");
         JLabel subHeading = subHeading("Add Patient");
@@ -307,11 +304,20 @@ public class Test extends JFrame {
         topPanel.add(txtPatientSurname);
 
         JLabel lblPatientDOB = label("Date Of Birth");
-        //JLabel lblPatientDOBVal = new JLabel();
+        JLabel lblPatientDOBVal = new JLabel();
         JButton btnDate = new JButton("Date");
+
+        JPanel actionDatePanel = new JPanel();
+        actionDatePanel.add(lblPatientDOBVal);
+        actionDatePanel.add(btnDate);
+
         topPanel.add(lblPatientDOB);
-        //topPanel.add(lblPatientDOBVal);
-        topPanel.add(btnDate);
+        topPanel.add(actionDatePanel);
+
+        btnDate.addActionListener(e -> {
+            DatePicker datePicker = new DatePicker(this);
+            lblPatientDOBVal.setText(datePicker.setPickedDate());
+        });
 
         JLabel lblPatientMobileNo = label("Mobile Number");
         JTextField txtPatientMobileNo = textField();
@@ -323,10 +329,11 @@ public class Test extends JFrame {
         topPanel.add(lblPatientNIC);
         topPanel.add(txtPatientNIC);
 
+        initDoctor();
         JLabel lblDoctorName = label("Doctor Name");
-        JTextField txtDoctorName = textField();
+        JComboBox<String> cbDoctorNames = new JComboBox<>(doctorDropdown(doctorList));
         topPanel.add(lblDoctorName);
-        topPanel.add(txtDoctorName);
+        topPanel.add(cbDoctorNames);
 
         JLabel lblConsultationHours = label("Consultation Hours");
         JTextField txtConsultationHours = textField();
@@ -349,7 +356,6 @@ public class Test extends JFrame {
 
         jLabelImage.setBounds(0, 0, 10, 20);
         bottomPanel.add(upload);
-
 
         upload.addActionListener(ae -> {
             // TODO add your handling code here:
@@ -375,7 +381,11 @@ public class Test extends JFrame {
         JLabel lblMessage = new JLabel();
         topPanel.add(lblMessage);
 
-        topPanel.setLayout(new GridLayout(10, 2));
+        GridLayout formLayout = new GridLayout(10, 2);
+        formLayout.setHgap(5);
+        formLayout.setVgap(5);
+
+        topPanel.setLayout(formLayout);
 
         JButton btnReset = button("Reset");
         JButton btnRandom = button("Assign Doctor");
@@ -397,7 +407,6 @@ public class Test extends JFrame {
         panel.add(headerPanel, BorderLayout.NORTH);
         panel.add(topPanel, BorderLayout.CENTER);
         panel.add(bottomPanel, BorderLayout.SOUTH);
-        panel.setSize(500,1000);
 
         menuBtn.addActionListener(e -> {
             mainPanel.removeAll();
@@ -419,16 +428,35 @@ public class Test extends JFrame {
                     lblMessage.setText("An Error Occurred!!!");
                 }
 
-                String txtDoctorNameValue = txtDoctorName.getText();
+                initDoctor();
+                initPatient();
+                initConsultations("src/consultations.txt");
+
+                System.out.println(Arrays.toString(doctorDropdown(doctorList)));
+
                 String txtPatientNameValue = txtPatientName.getText();
+                String txtPatientSurnameValue = txtPatientSurname.getText();
+                String txtPatientDOBValue = lblPatientDOBVal.getText();
+                String txtPatientMobileNoValue = txtPatientMobileNo.getText();
+                int txtPatientNICValue = parseInt(txtPatientNIC.getText());
+
+                Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
+
+                String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
                 Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
                 Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
                 txtCost.setText(String.valueOf(consultationCost));
                 double txtCostValue = Double.parseDouble(txtCost.getText());
                 String txtNotesValue = txtNotes.getText();
 
-                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), getPatientByName(txtPatientNameValue, patientList), new Date(), txtCostValue, txtNotesValue);
+                System.out.println(getDoctorByName(txtDoctorNameValue, doctorList));
+
+                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, new Date(), txtCostValue, txtNotesValue);
                 consultations.add(consultation);
+                patientList.add(patient);
+
+                System.out.println(consultation);
+                System.out.println(patient);
 
                 String message = saveConsultation("src/consultations.txt");
                 if (message.equals("success")) {
@@ -444,7 +472,7 @@ public class Test extends JFrame {
 
         btnReset.addActionListener(e -> {
             txtPatientName.setText("");
-            txtDoctorName.setText("");
+            cbDoctorNames.removeAll();
             txtConsultationHours.setText("");
             txtCost.setText("");
             txtNotes.setText("");
@@ -523,17 +551,14 @@ public class Test extends JFrame {
         String status;
         try {
             File myObj = new File(pathName);
-            Scanner myReader = null;
-            try {
-                myReader = new Scanner(myObj);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
-                //Consultation initConsultation = new Consultation(arr[0], arr[1], arr[2], arr[3], arr[4]);
-                //consultations.add(initConsultation);
+                int medicalLicenseNumber = Integer.parseInt(arr[0]);
+                int patientId = Integer.parseInt(arr[1]);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), SimpleDateFormat.getDateInstance().parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
+                consultations.add(initConsultation);
             }
             myReader.close();
             status = "success";
@@ -613,6 +638,24 @@ public class Test extends JFrame {
         return null;
     }
 
+    private Patient getPatientById(int id, ArrayList<Patient> patientList) {
+        for (Patient patient : patientList) {
+            if (patient.getId() == id) {
+                return patient;
+            }
+        }
+        return null;
+    }
+
+    private Doctor getDoctorByMedicalLicenceNo(int medicalLicenceNo, ArrayList<Doctor> doctorList) {
+        for (Doctor doctor : doctorList) {
+            if (doctor.getMedicalLicenceNo() == medicalLicenceNo) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
     private String saveConsultation(String fileName) {
         String message;
         try {
@@ -647,5 +690,9 @@ public class Test extends JFrame {
         lblMessage.setFont(new Font("Arial", Font.BOLD, 25));
         JOptionPane.showMessageDialog(mainPanel, lblMessage,
                 "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
+        return doctorList.stream().map(doctor -> doctor.getName() + "-" + doctor.getMedicalLicenceNo()).toArray(String[]::new);
     }
 }
