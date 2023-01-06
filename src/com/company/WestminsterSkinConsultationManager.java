@@ -99,7 +99,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
 
     @Override
     public void viewGui() {
-        SkinConsultationCentre.start();
+        Gui.start();
     }
 
     private void initialise() {
