@@ -78,7 +78,7 @@ public class Test extends JFrame {
             //main();
         });
 
-        JButton mainMenu = button("Menu");
+        JButton mainMenu = menuButton("Menu");
 
         bottomPanel.add(mainMenu);
         bottomPanel.add(refresh);
@@ -122,6 +122,7 @@ public class Test extends JFrame {
         Image newimg1 = img1.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
         icon1 = new ImageIcon( newimg1 );
         JButton btn1 = new JButton(icon1);
+        btn1.setToolTipText("Add Consultations");
         btn1.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
@@ -130,6 +131,7 @@ public class Test extends JFrame {
         Image newimg2 = img2.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
         icon2 = new ImageIcon( newimg2 );
         JButton btn2 = new JButton(icon2);
+        btn2.setToolTipText("Check Doctor Availability");
         btn2.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
@@ -138,6 +140,7 @@ public class Test extends JFrame {
         Image newimg3 = img3.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
         icon3 = new ImageIcon( newimg3 );
         JButton btn3 = new JButton(icon3);
+        btn3.setToolTipText("Saved Consultations");
         btn3.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn3), BorderLayout.LINE_END);
 
@@ -231,10 +234,10 @@ public class Test extends JFrame {
         JLabel mainHeading = mainHeading("Saved Consultations");
         headerPanel.add(mainHeading);
 
-        JButton menuBtn = button("Menu");
+        JButton menuBtn = menuButton("Menu");
         bottomPanel.add(menuBtn);
 
-        ArrayList<String[]> doctorList = getDoctorFileContent("src/doctorsList.txt");
+        ArrayList<String[]> doctorList = getDoctorFileContent("src/assets/files/doctorsList.txt");
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -270,7 +273,7 @@ public class Test extends JFrame {
     }
 
     private JTable consultantsTable() {
-        ArrayList<String[]> doctorList = getDoctorFileContent("src/doctorsList.txt");
+        ArrayList<String[]> doctorList = getDoctorFileContent("src/assets/files/doctorsList.txt");
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -443,7 +446,7 @@ public class Test extends JFrame {
         JButton btnReset = button("Reset");
         JButton btnRandom = button("Assign Doctor");
         JButton btnAdd = button("Add Consultation");
-        JButton menuBtn = button("Menu");
+        JButton menuBtn = menuButton("Menu");
         bottomPanel.add(btnReset);
         bottomPanel.add(btnRandom);
         bottomPanel.add(btnAdd);
@@ -501,7 +504,7 @@ public class Test extends JFrame {
                 consultations.add(consultation);
                 patientList.add(patient);
 
-                String message = saveConsultation("src/consultations.txt");
+                String message = saveConsultation("src/assets/files/consultations.txt");
                 if (message.equals("success")) {
                     showMessageDialog("Consultation Added Successfully...");
                     btnReset.doClick();
@@ -530,7 +533,6 @@ public class Test extends JFrame {
                 System.out.println("Error");
             } else {
                 int randomIndex = (int) (Math.random() * cbDoctorNames.getItemCount());
-                System.out.println("Random Doctor: " + doctorList.get(randomIndex));
                 cbDoctorNames.setSelectedIndex(randomIndex);
             }
         });
@@ -588,7 +590,7 @@ public class Test extends JFrame {
             lblDoctorAvailableTimeTo.setText(datePicker.setPickedDate());
         });
 
-        ArrayList<String[]> timesList = getTimesFileContent("src/doctorAvailableTimes.txt");
+        ArrayList<String[]> timesList = getTimesFileContent("src/assets/files/doctorAvailableTimes.txt");
 
         String[][] data = timesList.toArray(String[][]::new);
         String[] column = {
@@ -627,7 +629,7 @@ public class Test extends JFrame {
 
         JButton btnReset = button("Reset");
         JButton btnUpdate = button("Update");
-        JButton menuBtn = button("Menu");
+        JButton menuBtn = menuButton("Menu");
         bottomPanel.add(btnReset);
         bottomPanel.add(btnUpdate);
         bottomPanel.add(menuBtn);
@@ -650,7 +652,7 @@ public class Test extends JFrame {
                 String message;
                 if (status.equals("success")) {
                     try {
-                        Formatter formatter = new Formatter("src/doctorAvailableTimes.txt");
+                        Formatter formatter = new Formatter("src/assets/files/doctorAvailableTimes.txt");
                         formatter.format("%s", (String) cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
                         formatter.close();
                         message = "success";
@@ -684,7 +686,7 @@ public class Test extends JFrame {
     private String initConsultations() {
         String status;
         try {
-            File myObj = new File("src/consultations.txt");
+            File myObj = new File("src/assets/files/consultations.txt");
             Scanner myReader = new Scanner(myObj);
             consultations.clear();
             while (myReader.hasNextLine()) {
@@ -693,11 +695,9 @@ public class Test extends JFrame {
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
                 LocalDate date = LocalDate.parse(arr[2]);
-                System.out.println(date);
                 Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), arr[4]);
                 consultations.add(initConsultation);
             }
-            System.out.println(consultations);
             myReader.close();
             status = "success";
         } catch (Exception exception) {
@@ -708,7 +708,7 @@ public class Test extends JFrame {
 
     private void initDoctor() {
         try {
-            File myObj = new File("src/doctorsList.txt");
+            File myObj = new File("src/assets/files/doctorsList.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -726,27 +726,30 @@ public class Test extends JFrame {
     private String initPatient() {
         String status;
         try {
-            File myObj = new File("src/patientsList.txt");
+            File myObj = new File("src/assets/files/patientsList.txt");
             Scanner myReader = new Scanner(myObj);
-            patientList.clear();
-            while (myReader.hasNextLine()) {
+            this.patientList.clear();
+
+            while(myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
-                Patient initPatient = new Patient(arr[0], arr[1], arr[2], arr[3], parseInt(arr[4]));
-                patientList.add(initPatient);
+                Patient initPatient = new Patient(arr[0], arr[1], arr[2], arr[3], Integer.parseInt(arr[4]));
+                this.patientList.add(initPatient);
             }
+
             myReader.close();
             status = "success";
-        } catch (Exception exception) {
+        } catch (Exception var7) {
             status = "error";
         }
+
         return status;
     }
 
     private String initAvailableTimes() {
         String status;
         try {
-            File myObj = new File("src/doctorAvailableTimes.txt");
+            File myObj = new File("src/assets/files/doctorAvailableTimes.txt");
             Scanner myReader = new Scanner(myObj);
             times.clear();
             while (myReader.hasNextLine()) {
@@ -756,7 +759,6 @@ public class Test extends JFrame {
                 times.add(arr[1]);
                 times.add(arr[2]);
             }
-            System.out.println(times);
             myReader.close();
             status = "success";
         } catch (Exception exception) {
@@ -815,6 +817,7 @@ public class Test extends JFrame {
     private String saveConsultation(String fileName) {
         String message;
         try {
+            System.out.println(consultations);
             Formatter formatter = new Formatter(fileName);
             if (consultations.size() > 0) {
                 for (Consultation consultation : consultations) {
@@ -869,6 +872,15 @@ public class Test extends JFrame {
         btn.setFont(new Font(null, Font.BOLD, 15));
         btn.setForeground(new Color(2, 62, 138));
         btn.setBackground(new Color(72, 202, 228));
+        btn.setBorder(new EmptyBorder(10, 10, 10, 10));
+        return btn;
+    }
+
+    private JButton menuButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font(null, Font.BOLD, 15));
+        btn.setForeground(new Color(255, 255, 255));
+        btn.setBackground(new Color(0, 150, 199));
         btn.setBorder(new EmptyBorder(10, 10, 10, 10));
         return btn;
     }
