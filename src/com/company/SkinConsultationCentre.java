@@ -528,8 +528,8 @@ public class SkinConsultationCentre extends JFrame {
                 double txtCostValue = Double.parseDouble(txtCost.getText());
                 String txtNotesValue = txtNotes.getText();
 
-                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), getPatientByName(txtPatientNameValue, patientList), new Date(), txtCostValue, txtNotesValue);
-                consultations.add(consultation);
+                /*Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), getPatientByName(txtPatientNameValue, patientList), new Date(), txtCostValue, txtNotesValue);
+                consultations.add(consultation);*/
 
                 String message = saveConsultation("src/consultations.txt");
                 if (message.equals("success")) {
@@ -600,8 +600,8 @@ public class SkinConsultationCentre extends JFrame {
                 String[] arr = data.split(",");
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), SimpleDateFormat.getDateInstance().parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
-                consultations.add(initConsultation);
+                /*Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), SimpleDateFormat.getDateInstance().parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
+                consultations.add(initConsultation);*/
             }
             myReader.close();
             status = "success";

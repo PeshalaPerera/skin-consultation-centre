@@ -1,15 +1,15 @@
 package com.company;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Consultation {
     private Doctor doctor;
     private Patient patient;
-    private Date time;
+    private LocalDate time;
     private double cost;
     private String notes;
 
-    public Consultation(Doctor doctor, Patient patient, Date time, double cost, String notes) {
+    public Consultation(Doctor doctor, Patient patient, LocalDate time, double cost, String notes) {
         this.doctor = doctor;
         this.patient = patient;
         this.time = time;
@@ -33,11 +33,11 @@ public class Consultation {
         this.patient = patient;
     }
 
-    public Date getTime() {
-        return time;
+    public LocalDate getTime() {
+        return LocalDate.from(time);
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalDate time) {
         this.time = time;
     }
 
@@ -63,7 +63,7 @@ public class Consultation {
                 patient.getId() + "," +
                 time + "," +
                 cost + "," +
-                notes;
+                notes + "\n";
     }
 
     public String toFormattedString() {

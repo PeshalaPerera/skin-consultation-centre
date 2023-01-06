@@ -6,7 +6,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
@@ -17,8 +17,7 @@ public class Test extends JFrame {
     ArrayList<Patient> patientList = new ArrayList<>();
     ArrayList<Consultation> consultations = new ArrayList<>();
     ArrayList<Doctor> doctorList = new ArrayList<>();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-    String today = dateFormat.format(new Date());
+    ArrayList<String> times = new ArrayList<String>();
 
     public static void main(String[] args) {
         Test skinConsultationCentre = new Test();
@@ -84,7 +83,6 @@ public class Test extends JFrame {
         bottomPanel.add(mainMenu);
         bottomPanel.add(refresh);
         bottomPanel.add(exit);
-        ;
         mainConsultantsPanel.add(sp, BorderLayout.CENTER);
         mainConsultantsPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -101,11 +99,10 @@ public class Test extends JFrame {
         panel1.setBackground(new Color(255, 255, 255));
 
         panel2.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 10));
-        panel2.setBackground(new Color(64, 182, 0));
+        panel2.setBackground(new Color(255, 255, 255));
 
         panel3.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 10));
-        panel3.setBackground(new Color(227, 4, 69));
-        panel3.add(new JButton());
+        panel3.setBackground(new Color(255, 255, 255));
 
         welcomePanel.setBorder(BorderFactory.createLineBorder(new Color(144, 224, 239), 10));
         welcomePanel.setBackground(new Color(0, 119, 182));
@@ -119,18 +116,32 @@ public class Test extends JFrame {
         lbl2.setFont(new Font("Calibri", Font.BOLD, 38));
 
         JPanel subPanel = new JPanel();
-        Icon icon1 = new ImageIcon("src/img1.PNG");
+
+        Icon icon1 = new ImageIcon("src/assets/images/img1.jpg");
+        Image img1 = ((ImageIcon) icon1).getImage() ;
+        Image newimg1 = img1.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon1 = new ImageIcon( newimg1 );
         JButton btn1 = new JButton(icon1);
-        btn1.setBorder(new EmptyBorder(50, 50, 50, 50));
+        btn1.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
-        Icon icon2 = new ImageIcon("src/img2.PNG");
+        Icon icon2 = new ImageIcon("src/assets/images/img2.jpg");
+        Image img2 = ((ImageIcon) icon2).getImage() ;
+        Image newimg2 = img2.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon2 = new ImageIcon( newimg2 );
         JButton btn2 = new JButton(icon2);
+        btn2.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
-        Icon icon3 = new ImageIcon("src/img3.PNG");
+        Icon icon3 = new ImageIcon("src/assets/images/img3.jpg");
+        Image img3 = ((ImageIcon) icon3).getImage() ;
+        Image newimg3 = img3.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon3 = new ImageIcon( newimg3 );
         JButton btn3 = new JButton(icon3);
+        btn3.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn3), BorderLayout.LINE_END);
+
+        subPanel.setBackground(new Color(0, 119, 182));
 
         welcomePanel.add(lbl, BorderLayout.NORTH);
         welcomePanel.add(lbl2, BorderLayout.CENTER);
@@ -138,8 +149,8 @@ public class Test extends JFrame {
 
         mainPanel.setLayout(new GridLayout(1, 1));
 
-        JButton menuBtn = new JButton("Menu");
-        menuBtn.addActionListener(e -> {
+        //JButton menuBtn = new JButton("Menu");
+        /*menuBtn.addActionListener(e -> {
             mainPanel.removeAll();
             mainPanel.repaint();
             mainPanel.revalidate();
@@ -151,7 +162,7 @@ public class Test extends JFrame {
 
         panel1.add(menuBtn);
         panel2.add(menuBtn);
-        panel3.add(menuBtn);
+        panel3.add(menuBtn);*/
         mainPanel.add(welcomePanel);
 
         btn1.addActionListener(e -> {
@@ -176,8 +187,8 @@ public class Test extends JFrame {
             mainPanel.repaint();
             mainPanel.revalidate();
 
-            JPanel doctorAvailability = doctorAvailability();
-            panel2.add(doctorAvailability);
+            //JPanel doctorAvailability = doctorAvailability();
+            panel2.add(doctorAvailability());
         });
 
         btn3.addActionListener(e -> {
@@ -190,29 +201,40 @@ public class Test extends JFrame {
             mainPanel.revalidate();
 
             JPanel savedConsultations = savedConsultations();
-            panel3.add(savedConsultations());
+            panel3.add(savedConsultations);
         });
 
         return mainPanel;
     }
 
     private JPanel addConsultation() {
-        JPanel mainAddConsultantPanel = addConsultationPanel();
+        JPanel mainAddConsultantPanel = addConsultationsPanel();
         mainAddConsultantPanel.setBackground(new Color(255, 255, 255));
         return mainAddConsultantPanel;
     }
 
     private JPanel doctorAvailability() {
-        JPanel mainDoctorPanel = new JPanel();
-
+        JPanel mainDoctorPanel = doctorAvailabilityPanel();
+        mainDoctorPanel.setBackground(new Color(255, 255, 255));
         return mainDoctorPanel;
     }
 
     private JPanel savedConsultations() {
-        JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        mainPanel.setBackground(Color.cyan);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panel.setBackground(new Color(255, 255, 255));
+        JPanel headerPanel = new JPanel();
+        JPanel topPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
 
-        ArrayList<String[]> doctorList = getFileContent("src/consultations.txt");
+        topPanel.setBorder(new EmptyBorder(0, 50, 0, 50));
+
+        JLabel mainHeading = mainHeading("Saved Consultations");
+        headerPanel.add(mainHeading);
+
+        JButton menuBtn = button("Menu");
+        bottomPanel.add(menuBtn);
+
+        ArrayList<String[]> doctorList = getDoctorFileContent("src/doctorsList.txt");
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -230,15 +252,25 @@ public class Test extends JFrame {
         table.setAutoCreateRowSorter(true);
         table.setBackground(new Color(202, 240, 248));
         table.setShowVerticalLines(true);
+        table.setPreferredScrollableViewportSize(new Dimension(400, 465));
 
         JScrollPane sp = new JScrollPane(table);
-        mainPanel.add(sp);
+        topPanel.add(sp);
 
-        return mainPanel;
+        BorderLayout layout = new BorderLayout();
+        panel.setLayout(layout);
+
+        headerPanel.setLayout(new GridLayout(2, 1));
+
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(topPanel, BorderLayout.CENTER);
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
+        return panel;
     }
 
     private JTable consultantsTable() {
-        ArrayList<String[]> doctorList = getFileContent("src/doctorsList.txt");
+        ArrayList<String[]> doctorList = getDoctorFileContent("src/doctorsList.txt");
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -259,7 +291,7 @@ public class Test extends JFrame {
         return table;
     }
 
-    private ArrayList<String[]> getFileContent(String pathName) {
+    private ArrayList<String[]> getDoctorFileContent(String pathName) {
         File myObj = new File(pathName);
         ArrayList<String[]> doctorList = new ArrayList<>();
         Scanner myReader = null;
@@ -279,7 +311,27 @@ public class Test extends JFrame {
         return doctorList;
     }
 
-    private JPanel addConsultationPanel() {
+    private ArrayList<String[]> getTimesFileContent(String pathName) {
+        File myObj = new File(pathName);
+        ArrayList<String[]> timesList = new ArrayList<>();
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(myObj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            assert myReader != null;
+            if (!myReader.hasNextLine()) break;
+            String data = myReader.nextLine();
+            String[] arr = data.split(",");
+            timesList.add(arr);
+        }
+        myReader.close();
+        return timesList;
+    }
+
+    private JPanel addConsultationsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
@@ -289,7 +341,7 @@ public class Test extends JFrame {
         topPanel.setBorder(new EmptyBorder(50, 50, 0, 50));
 
         JLabel mainHeading = mainHeading("Add Consultation");
-        JLabel subHeading = subHeading("Add Patient");
+        JLabel subHeading = subHeading("Add Patient/Doctor/Consultation Details");
 
         headerPanel.add(mainHeading);
         headerPanel.add(subHeading);
@@ -306,7 +358,7 @@ public class Test extends JFrame {
 
         JLabel lblPatientDOB = label("Date Of Birth");
         JLabel lblPatientDOBVal = new JLabel();
-        JButton btnDate = new JButton("Date");
+        JButton btnDate = dateButton("Date");
 
         JPanel actionDatePanel = new JPanel();
         actionDatePanel.add(lblPatientDOBVal);
@@ -391,14 +443,11 @@ public class Test extends JFrame {
         JButton btnReset = button("Reset");
         JButton btnRandom = button("Assign Doctor");
         JButton btnAdd = button("Add Consultation");
-        JButton btnAddNew = button("Add Another Consultation");
         JButton menuBtn = button("Menu");
         bottomPanel.add(btnReset);
         bottomPanel.add(btnRandom);
         bottomPanel.add(btnAdd);
         bottomPanel.add(menuBtn);
-
-        btnAddNew.setVisible(false);
 
         BorderLayout layout = new BorderLayout();
         panel.setLayout(layout);
@@ -424,16 +473,14 @@ public class Test extends JFrame {
                     "Are you sure you want to save consultation?", "Select an Option?",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                String status = initConsultations("src/consultations.txt");
+                String status = initConsultations();
                 if (status == "error") {
                     lblMessage.setText("Could not load the data!!!");
                 }
 
                 initDoctor();
                 initPatient();
-                initConsultations("src/consultations.txt");
-
-                System.out.println(Arrays.toString(doctorDropdown(doctorList)));
+                initConsultations();
 
                 String txtPatientNameValue = txtPatientName.getText();
                 String txtPatientSurnameValue = txtPatientSurname.getText();
@@ -450,21 +497,14 @@ public class Test extends JFrame {
                 double txtCostValue = Double.parseDouble(txtCost.getText());
                 String txtNotesValue = txtNotes.getText();
 
-                System.out.println(getDoctorByName(txtDoctorNameValue, doctorList));
-
-                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, new Date(), txtCostValue, txtNotesValue);
+                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
                 consultations.add(consultation);
                 patientList.add(patient);
-
-                System.out.println(consultation);
-                System.out.println(patient);
 
                 String message = saveConsultation("src/consultations.txt");
                 if (message.equals("success")) {
                     showMessageDialog("Consultation Added Successfully...");
                     btnReset.doClick();
-                    btnAdd.setVisible(false);
-                    btnAddNew.setVisible(true);
                 } else {
                     showErrorMessageDialog();
                 }
@@ -473,7 +513,11 @@ public class Test extends JFrame {
 
         btnReset.addActionListener(e -> {
             txtPatientName.setText("");
-            cbDoctorNames.removeAll();
+            txtPatientSurname.setText("");
+            lblPatientDOBVal.setText("");
+            txtPatientMobileNo.setText("");
+            txtPatientNIC.setText("");
+            cbDoctorNames.setSelectedIndex(0);
             txtConsultationHours.setText("");
             txtCost.setText("");
             txtNotes.setText("");
@@ -482,89 +526,180 @@ public class Test extends JFrame {
 
         btnRandom.addActionListener(e -> {
             initDoctor();
-            /*String[] doctorNamesList = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
-            ArrayList indexArr = new ArrayList();
-            for (Doctor doctor:doctorList) {
-
-            }*/
-            System.out.println(doctorList);
             if (doctorList.isEmpty()) {
                 System.out.println("Error");
             } else {
-                int randomIndex = (int) (Math.random() * doctorList.size());
+                int randomIndex = (int) (Math.random() * cbDoctorNames.getItemCount());
                 System.out.println("Random Doctor: " + doctorList.get(randomIndex));
-                /*txtDoctorName.setText(doctorNamesList[1]);*/
+                cbDoctorNames.setSelectedIndex(randomIndex);
             }
-
-        });
-
-        btnAddNew.addActionListener(e -> {
-            btnReset.doClick();
-            btnAddNew.setVisible(false);
-            btnAdd.setVisible(true);
-            btnAdd.setText("Save Consultation");
         });
 
         return panel;
     }
 
-    private JLabel mainHeading(String message) {
-        JLabel lbl = new JLabel(message, JLabel.LEFT);
-        lbl.setFont(new Font(null, Font.BOLD, 25));
-        lbl.setForeground(new Color(0, 0, 0));
-        lbl.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
-        return lbl;
+    private JPanel doctorAvailabilityPanel() {
+        JScrollPane scrollPane = new JScrollPane();
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panel.setBackground(new Color(255, 255, 255));
+        JPanel headerPanel = new JPanel();
+        JPanel topPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
+
+        topPanel.setBorder(new EmptyBorder(50, 50, 0, 50));
+
+        JLabel mainHeading = mainHeading("Doctor Availability");
+        JLabel subHeading = subHeading("Check Doctor/ Add Available Times");
+
+        headerPanel.add(mainHeading);
+        headerPanel.add(subHeading);
+
+        initDoctor();
+        JLabel lblDoctorName = label("Doctor Name");
+        JComboBox<String> cbDoctorNames = new JComboBox<>(doctorDropdown(doctorList));
+        topPanel.add(lblDoctorName);
+        topPanel.add(cbDoctorNames);
+
+        JLabel lblDoctorAvailableTimeFrom = new JLabel();
+        JLabel lblDoctorAvailableTimeTo = new JLabel();
+        JButton btnFromDate = dateButton("Date From");
+        JButton btnToDate = dateButton("Date To");
+        JPanel dateFromPanel = new JPanel();
+        JPanel dateToPanel = new JPanel();
+
+        dateFromPanel.add(lblDoctorAvailableTimeFrom);
+        dateFromPanel.add(btnFromDate);
+
+        dateToPanel.add(lblDoctorAvailableTimeTo);
+        dateToPanel.add(btnToDate);
+
+        topPanel.add(lblDoctorAvailableTimeFrom);
+        topPanel.add(lblDoctorAvailableTimeTo);
+        topPanel.add(dateFromPanel);
+        topPanel.add(dateToPanel);
+
+        btnFromDate.addActionListener(e -> {
+            DatePicker datePicker = new DatePicker(this);
+            lblDoctorAvailableTimeFrom.setText(datePicker.setPickedDate());
+        });
+
+        btnToDate.addActionListener(e -> {
+            DatePicker datePicker = new DatePicker(this);
+            lblDoctorAvailableTimeTo.setText(datePicker.setPickedDate());
+        });
+
+        ArrayList<String[]> timesList = getTimesFileContent("src/doctorAvailableTimes.txt");
+
+        String[][] data = timesList.toArray(String[][]::new);
+        String[] column = {
+                "Name", "Medical Licence Number", "Date From", "Date To"
+        };
+        JTable table = new JTable(data, column);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
+        table.getTableHeader().setOpaque(false);
+        table.getTableHeader().setBackground(new Color(0, 119, 182));
+        table.getTableHeader().setForeground(new Color(202, 240, 248));
+        table.getTableHeader().setSize(40, 40);
+        table.setSelectionBackground(new Color(0, 180, 216));
+        table.setGridColor(new Color(2, 62, 138, 255));
+        table.setRowHeight(40);
+        table.setFont(new Font("Arial", Font.PLAIN, 15));
+        table.setAutoCreateRowSorter(true);
+        table.setBackground(new Color(202, 240, 248));
+        table.setShowVerticalLines(true);
+
+        JScrollPane sp = new JScrollPane(table);
+        sp.setSize(5, 5);
+        JPanel doctorAvailabilityTimes =new JPanel();
+
+        doctorAvailabilityTimes.setLayout(new GridLayout(1, 2));
+
+        //doctorAvailabilityTimes.add(sp);
+        doctorAvailabilityTimes.add(new JButton("Test"));
+
+        topPanel.add(doctorAvailabilityTimes);
+
+        GridLayout formLayout = new GridLayout(5, 2);
+        formLayout.setHgap(5);
+        formLayout.setVgap(5);
+
+        topPanel.setLayout(formLayout);
+
+        JButton btnReset = button("Reset");
+        JButton btnUpdate = button("Update");
+        JButton menuBtn = button("Menu");
+        bottomPanel.add(btnReset);
+        bottomPanel.add(btnUpdate);
+        bottomPanel.add(menuBtn);
+
+        BorderLayout layout = new BorderLayout();
+        panel.setLayout(layout);
+
+        headerPanel.setLayout(new GridLayout(2, 1));
+
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(topPanel, BorderLayout.CENTER);
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
+        btnUpdate.addActionListener(ae -> {
+            if (JOptionPane.showConfirmDialog(mainPanel,
+                    "Are you sure?", "Select an Option?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                String status = initAvailableTimes();
+                String message;
+                if (status.equals("success")) {
+                    try {
+                        Formatter formatter = new Formatter("src/doctorAvailableTimes.txt");
+                        formatter.format("%s", (String) cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
+                        formatter.close();
+                        message = "success";
+                    } catch (Exception exception) {
+                        message = "error";
+                    }
+
+                    if (message.equals("success")) {
+                        showMessageDialog("Updated Successfully...");
+                        btnReset.doClick();
+                    } else {
+                        showErrorMessageDialog();
+                    }
+                } else {
+                    showErrorMessageDialog();
+                }
+            }
+        });
+
+        btnReset.addActionListener(e -> {
+            cbDoctorNames.setSelectedIndex(0);
+            lblDoctorAvailableTimeFrom.setText("");
+            lblDoctorAvailableTimeTo.setText("");
+        });
+
+        scrollPane.add(panel);
+
+        return panel;
     }
 
-    private JLabel subHeading(String message) {
-        JLabel lbl = new JLabel(message, JLabel.LEFT);
-        lbl.setFont(new Font(null, Font.BOLD, 22));
-        lbl.setForeground(new Color(104, 116, 149));
-        lbl.setBorder(BorderFactory.createEmptyBorder(5, 25, 5, 10));
-        return lbl;
-    }
-
-    private JLabel label(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font(null, Font.BOLD, 15));
-        label.setForeground(new Color(0, 119, 182));
-        label.setBorder(new EmptyBorder(10, 0, 10, 0));
-        return label;
-    }
-
-    private JTextField textField() {
-        JTextField txtField = new JTextField();
-        txtField.setFont(new Font(null, Font.PLAIN, 15));
-        txtField.setForeground(new Color(2, 62, 138));
-        return txtField;
-    }
-
-    private JButton button(String text) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font(null, Font.BOLD, 15));
-        btn.setForeground(new Color(2, 62, 138));
-        btn.setBackground(new Color(72, 202, 228));
-        btn.setBorder(new EmptyBorder(10, 10, 10, 10));
-        return btn;
-    }
-
-    private String initConsultations(String pathName) {
+    private String initConsultations() {
         String status;
         try {
-            File myObj = new File(pathName);
+            File myObj = new File("src/consultations.txt");
             Scanner myReader = new Scanner(myObj);
+            consultations.clear();
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), dateFormat.parse(arr[2]), Double.parseDouble(arr[3]), arr[4]);
+                LocalDate date = LocalDate.parse(arr[2]);
+                System.out.println(date);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), arr[4]);
                 consultations.add(initConsultation);
             }
+            System.out.println(consultations);
             myReader.close();
             status = "success";
-            initDoctor();
-            initPatient();
         } catch (Exception exception) {
             status = "error";
         }
@@ -581,7 +716,6 @@ public class Test extends JFrame {
                 Doctor doctor = new Doctor(arr[0], arr[1], arr[2], arr[3], Integer.parseInt(arr[4]), arr[5]);
                 doctorList.add(doctor);
             }
-            System.out.println(doctorList);
             myReader.close();
             System.out.println("Doctors List Initialised!\n");
         } catch (Exception exception) {
@@ -601,7 +735,28 @@ public class Test extends JFrame {
                 Patient initPatient = new Patient(arr[0], arr[1], arr[2], arr[3], parseInt(arr[4]));
                 patientList.add(initPatient);
             }
-            System.out.println(patientList);
+            myReader.close();
+            status = "success";
+        } catch (Exception exception) {
+            status = "error";
+        }
+        return status;
+    }
+
+    private String initAvailableTimes() {
+        String status;
+        try {
+            File myObj = new File("src/doctorAvailableTimes.txt");
+            Scanner myReader = new Scanner(myObj);
+            times.clear();
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                String[] arr = data.split(",");
+                times.add(arr[0]);
+                times.add(arr[1]);
+                times.add(arr[2]);
+            }
+            System.out.println(times);
             myReader.close();
             status = "success";
         } catch (Exception exception) {
@@ -674,26 +829,71 @@ public class Test extends JFrame {
         return message;
     }
 
+    private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
+        return doctorList.stream().map(doctor -> doctor.getName()).toArray(String[]::new);
+    }
+
+    private JLabel mainHeading(String message) {
+        JLabel lbl = new JLabel(message, JLabel.LEFT);
+        lbl.setFont(new Font(null, Font.BOLD, 25));
+        lbl.setForeground(new Color(0, 0, 0));
+        lbl.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
+        return lbl;
+    }
+
+    private JLabel subHeading(String message) {
+        JLabel lbl = new JLabel(message, JLabel.LEFT);
+        lbl.setFont(new Font(null, Font.BOLD, 22));
+        lbl.setForeground(new Color(104, 116, 149));
+        lbl.setBorder(BorderFactory.createEmptyBorder(5, 25, 5, 10));
+        return lbl;
+    }
+
+    private JLabel label(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font(null, Font.BOLD, 15));
+        label.setForeground(new Color(0, 119, 182));
+        label.setBorder(new EmptyBorder(10, 0, 10, 0));
+        return label;
+    }
+
+    private JTextField textField() {
+        JTextField txtField = new JTextField();
+        txtField.setFont(new Font(null, Font.PLAIN, 15));
+        txtField.setForeground(new Color(2, 62, 138));
+        return txtField;
+    }
+
+    private JButton button(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font(null, Font.BOLD, 15));
+        btn.setForeground(new Color(2, 62, 138));
+        btn.setBackground(new Color(72, 202, 228));
+        btn.setBorder(new EmptyBorder(10, 10, 10, 10));
+        return btn;
+    }
+
+    private JButton dateButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setForeground(new Color(144, 224, 239));
+        btn.setBackground(new Color(3, 4, 94));
+        return btn;
+    }
+
     private void showMessageDialog(String message) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText(message);
-        lblMessage.setSize(1000, 300);
-        lblMessage.setForeground(new Color(4, 88, 2, 255));
-        lblMessage.setFont(new Font("Arial", Font.BOLD, 25));
+        lblMessage.setForeground(new Color(3, 4, 94, 255));
+        lblMessage.setFont(new Font("Arial", Font.BOLD, 17));
         JOptionPane.showMessageDialog(mainPanel, lblMessage);
     }
 
     private void showErrorMessageDialog() {
         JLabel lblMessage = new JLabel();
         lblMessage.setText("An Error Occurred!!!");
-        lblMessage.setSize(1000, 300);
-        lblMessage.setForeground(new Color(255, 0, 0, 255));
-        lblMessage.setFont(new Font("Arial", Font.BOLD, 25));
+        lblMessage.setForeground(new Color(227, 4, 69));
+        lblMessage.setFont(new Font("Arial", Font.BOLD, 17));
         JOptionPane.showMessageDialog(mainPanel, lblMessage,
                 "Error", JOptionPane.WARNING_MESSAGE);
-    }
-
-    private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
-        return doctorList.stream().map(doctor -> doctor.getName()).toArray(String[]::new);
     }
 }
