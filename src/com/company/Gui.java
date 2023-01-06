@@ -404,6 +404,9 @@ public class Gui extends JFrame {
         topPanel.add(lblNotes);
         topPanel.add(txtNotes);
 
+        EncryptDecryptString encryptDecryptString = new EncryptDecryptString();
+        encryptDecryptString.update("Hi");
+
         JLabel images = label("Images");
         JLabel jLabelImage = new JLabel();
         topPanel.add(images);

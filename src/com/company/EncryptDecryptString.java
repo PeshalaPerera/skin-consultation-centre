@@ -13,6 +13,33 @@ public class EncryptDecryptString {
         UNICODE_FORMAT = "UTF8";
     }
 
+    public static void main(String[] args) {
+        String text = "Hi";
+        try {
+            SecretKey key = generateKey("AES");
+            Cipher chiper = Cipher.getInstance("AES");
+
+            byte[] encryptedData = encryptString(text, key, chiper);
+            String encryptedString = new String(encryptedData);
+            System.out.println(encryptedString);
+
+        } catch (Exception e) {
+        }
+    }
+
+    public static void update(String text) {
+        try {
+            SecretKey key = generateKey("AES");
+            Cipher chiper = Cipher.getInstance("AES");
+
+            byte[] encryptedData = encryptString(text, key, chiper);
+            String encryptedString = new String(encryptedData);
+            System.out.println(encryptedString);
+
+        } catch (Exception e) {
+        }
+    }
+
     public static SecretKey generateKey(String encryptionType) {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance(encryptionType);
