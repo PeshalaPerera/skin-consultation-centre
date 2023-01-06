@@ -1,13 +1,23 @@
 package com.company;
 
+import javax.crypto.Cipher;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.Signature;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.*;
+
 
 import static java.lang.Integer.parseInt;
 
@@ -403,6 +413,38 @@ public class Test extends JFrame {
         topPanel.add(lblNotes);
         topPanel.add(txtNotes);
 
+        /*SecretKey key = EncryptDecryptString.generateKey("AES");
+        Cipher cipher = Cipher.getInstance("AES");
+
+        byte[] encryptedData = EncryptDecryptString.encryptString(text, key, Cipher.getInstance("AES"));
+*/
+        /*EncryptDecryptString encryptString = new EncryptDecryptString();
+        SecretKey key = encryptString.generateKey("AES");
+        Cipher chiper = Cipher.getInstance("AES");
+        byte[] encryptedData = encryptString.encryptString(txtNotes.getText(), key, chiper);
+        String encryptedNote = new String(encryptedData);*/
+
+        /*String encryptedNote;
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            SecretKey myKey = keyGenerator.generateKey();
+
+            byte[] text = txtNotes.getText().getBytes(StandardCharsets.UTF_8);
+            Cipher.getInstance("AES").init(Cipher.ENCRYPT_MODE, myKey);
+            byte[] textEncrypted = Cipher.getInstance("AES").doFinal(text);
+            encryptedNote = String.valueOf(textEncrypted);
+        } */
+
+       /* try {
+            EncryptDecryptString encryptDecryptString = new EncryptDecryptString();
+            EncryptDecryptString.encryptString(txtNotes, j);
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }*/
+
+
         JLabel images = label("Images");
         JLabel jLabelImage = new JLabel();
         topPanel.add(images);
@@ -498,7 +540,8 @@ public class Test extends JFrame {
                 Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
                 txtCost.setText(String.valueOf(consultationCost));
                 double txtCostValue = Double.parseDouble(txtCost.getText());
-                String txtNotesValue = txtNotes.getText();
+                //String txtNotesValue = encryptedNote;
+                String txtNotesValue = textField().getText();
 
                 Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
                 consultations.add(consultation);
