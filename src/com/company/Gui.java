@@ -18,7 +18,7 @@ public class Gui extends JFrame {
     ArrayList<Patient> patientList = new ArrayList<>();
     ArrayList<Consultation> consultations = new ArrayList<>();
     ArrayList<Doctor> doctorList = new ArrayList<>();
-    ArrayList<String> times = new ArrayList<String>();
+    ArrayList<String> times = new ArrayList<>();
 
     public static void start() {
         Gui gui = new Gui();
@@ -79,7 +79,7 @@ public class Gui extends JFrame {
             start();
         });
 
-        JButton mainMenu = menuButton("Menu");
+        JButton mainMenu = menuButton();
 
         bottomPanel.add(mainMenu);
         bottomPanel.add(refresh);
@@ -109,7 +109,7 @@ public class Gui extends JFrame {
         welcomePanel.setBorder(BorderFactory.createLineBorder(new Color(144, 224, 239), 10));
         welcomePanel.setBackground(new Color(0, 119, 182));
 
-        JLabel lbl = mainHeader("SKIN CONSULTATION CENTRE");
+        JLabel lbl = mainHeader();
 
         JLabel lbl2 = details("1. Add Consultation");
         JLabel lbl3 = details("2. Doctor Availability");
@@ -117,28 +117,28 @@ public class Gui extends JFrame {
 
         JPanel subPanel = new JPanel();
 
-        Icon icon1 = new ImageIcon("src/assets/images/img1.jpg");
-        Image img1 = ((ImageIcon) icon1).getImage() ;
-        Image newimg1 = img1.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
-        icon1 = new ImageIcon( newimg1 );
+        ImageIcon icon1 = new ImageIcon("src/assets/images/img1.jpg");
+        Image img1 = icon1.getImage() ;
+        Image newImg1 = img1.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon1 = new ImageIcon(newImg1);
         JButton btn1 = new JButton(icon1);
         btn1.setToolTipText("Add Consultations");
         btn1.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
-        Icon icon2 = new ImageIcon("src/assets/images/img2.jpg");
-        Image img2 = ((ImageIcon) icon2).getImage() ;
-        Image newimg2 = img2.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
-        icon2 = new ImageIcon( newimg2 );
+        ImageIcon icon2 = new ImageIcon("src/assets/images/img2.jpg");
+        Image img2 = icon2.getImage() ;
+        Image newImg2 = img2.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon2 = new ImageIcon(newImg2);
         JButton btn2 = new JButton(icon2);
         btn2.setToolTipText("Check Doctor Availability");
         btn2.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
-        Icon icon3 = new ImageIcon("src/assets/images/img3.jpg");
-        Image img3 = ((ImageIcon) icon3).getImage() ;
-        Image newimg3 = img3.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
-        icon3 = new ImageIcon( newimg3 );
+        ImageIcon icon3 = new ImageIcon("src/assets/images/img3.jpg");
+        Image img3 = icon3.getImage() ;
+        Image newImg3 = img3.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon3 = new ImageIcon(newImg3);
         JButton btn3 = new JButton(icon3);
         btn3.setToolTipText("Saved Consultations");
         btn3.setPreferredSize(new Dimension(150, 150));
@@ -158,7 +158,6 @@ public class Gui extends JFrame {
 
         mainPanel.setLayout(new GridLayout(1, 1));
 
-        //JButton menuBtn = new JButton("Menu");
         /*menuBtn.addActionListener(e -> {
             mainPanel.removeAll();
             mainPanel.repaint();
@@ -167,11 +166,7 @@ public class Gui extends JFrame {
             mainPanel.add(welcomePanel);
             mainPanel.repaint();
             mainPanel.revalidate();
-        });
-
-        panel1.add(menuBtn);
-        panel2.add(menuBtn);
-        panel3.add(menuBtn);*/
+        });*/
         mainPanel.add(welcomePanel);
 
         btn1.addActionListener(e -> {
@@ -240,10 +235,10 @@ public class Gui extends JFrame {
         JLabel mainHeading = mainHeading("Saved Consultations");
         headerPanel.add(mainHeading);
 
-        JButton menuBtn = menuButton("Menu");
+        JButton menuBtn = menuButton();
         bottomPanel.add(menuBtn);
 
-        ArrayList<String[]> doctorList = getDoctorFileContent("src/assets/files/doctorsList.txt");
+        ArrayList<String[]> doctorList = getDoctorFileContent();
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -279,7 +274,7 @@ public class Gui extends JFrame {
     }
 
     private JTable consultantsTable() {
-        ArrayList<String[]> doctorList = getDoctorFileContent("src/assets/files/doctorsList.txt");
+        ArrayList<String[]> doctorList = getDoctorFileContent();
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -300,8 +295,8 @@ public class Gui extends JFrame {
         return table;
     }
 
-    private ArrayList<String[]> getDoctorFileContent(String pathName) {
-        File myObj = new File(pathName);
+    private ArrayList<String[]> getDoctorFileContent() {
+        File myObj = new File("src/assets/files/doctorsList.txt");
         ArrayList<String[]> doctorList = new ArrayList<>();
         Scanner myReader = null;
         try {
@@ -320,8 +315,8 @@ public class Gui extends JFrame {
         return doctorList;
     }
 
-    private ArrayList<String[]> getTimesFileContent(String pathName) {
-        File myObj = new File(pathName);
+    private ArrayList<String[]> getTimesFileContent() {
+        File myObj = new File("src/assets/files/doctorAvailableTimes.txt");
         ArrayList<String[]> timesList = new ArrayList<>();
         Scanner myReader = null;
         try {
@@ -409,38 +404,6 @@ public class Gui extends JFrame {
         topPanel.add(lblNotes);
         topPanel.add(txtNotes);
 
-        /*SecretKey key = EncryptDecryptString.generateKey("AES");
-        Cipher cipher = Cipher.getInstance("AES");
-
-        byte[] encryptedData = EncryptDecryptString.encryptString(text, key, Cipher.getInstance("AES"));
-*/
-        /*EncryptDecryptString encryptString = new EncryptDecryptString();
-        SecretKey key = encryptString.generateKey("AES");
-        Cipher chiper = Cipher.getInstance("AES");
-        byte[] encryptedData = encryptString.encryptString(txtNotes.getText(), key, chiper);
-        String encryptedNote = new String(encryptedData);*/
-
-        /*String encryptedNote;
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            SecretKey myKey = keyGenerator.generateKey();
-
-            byte[] text = txtNotes.getText().getBytes(StandardCharsets.UTF_8);
-            Cipher.getInstance("AES").init(Cipher.ENCRYPT_MODE, myKey);
-            byte[] textEncrypted = Cipher.getInstance("AES").doFinal(text);
-            encryptedNote = String.valueOf(textEncrypted);
-        } */
-
-       /* try {
-            EncryptDecryptString encryptDecryptString = new EncryptDecryptString();
-            EncryptDecryptString.encryptString(txtNotes, j);
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }*/
-
-
         JLabel images = label("Images");
         JLabel jLabelImage = new JLabel();
         topPanel.add(images);
@@ -455,17 +418,17 @@ public class Gui extends JFrame {
             // TODO add your handling code here:
             JFileChooser browseImageFile = new JFileChooser();
             //Filter image extensions
-            FileNameExtensionFilter fnef = new FileNameExtensionFilter("IMAGES", "png", "jpg", "jpeg");
-            browseImageFile.addChoosableFileFilter(fnef);
+            FileNameExtensionFilter fileNameExtensionFilter = new FileNameExtensionFilter("IMAGES", "png", "jpg", "jpeg");
+            browseImageFile.addChoosableFileFilter(fileNameExtensionFilter);
             int showOpenDialogue = browseImageFile.showOpenDialog(null);
 
             if (showOpenDialogue == JFileChooser.APPROVE_OPTION) {
                 File selectedImageFile = browseImageFile.getSelectedFile();
                 String selectedImagePath = selectedImageFile.getAbsolutePath();
                 JOptionPane.showMessageDialog(null, selectedImagePath);
-                //Display image on jlable
+                //Display image on JLabel
                 ImageIcon ii = new ImageIcon(selectedImagePath);
-                //Resize image to fit jlabel
+                //Resize image to fit JLabel
                 Image image = ii.getImage().getScaledInstance(jLabelImage.getWidth(), jLabelImage.getHeight(), Image.SCALE_SMOOTH);
 
                 jLabelImage.setIcon(new ImageIcon(image));
@@ -484,7 +447,7 @@ public class Gui extends JFrame {
         JButton btnReset = button("Reset");
         JButton btnRandom = button("Assign Doctor");
         JButton btnAdd = button("Add Consultation");
-        JButton menuBtn = menuButton("Menu");
+        JButton menuBtn = menuButton();
         bottomPanel.add(btnReset);
         bottomPanel.add(btnRandom);
         bottomPanel.add(btnAdd);
@@ -515,7 +478,7 @@ public class Gui extends JFrame {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 String status = initConsultations();
-                if (status == "error") {
+                if (status.equals("error")) {
                     lblMessage.setText("Could not load the data!!!");
                 }
 
@@ -543,7 +506,7 @@ public class Gui extends JFrame {
                 consultations.add(consultation);
                 patientList.add(patient);
 
-                String message = saveConsultation("src/assets/files/consultations.txt");
+                String message = saveConsultation();
                 if (message.equals("success")) {
                     showMessageDialog("Consultation Added Successfully...");
                     btnReset.doClick();
@@ -629,7 +592,7 @@ public class Gui extends JFrame {
             lblDoctorAvailableTimeTo.setText(datePicker.setPickedDate());
         });
 
-        ArrayList<String[]> timesList = getTimesFileContent("src/assets/files/doctorAvailableTimes.txt");
+        ArrayList<String[]> timesList = getTimesFileContent();
 
         String[][] data = timesList.toArray(String[][]::new);
         String[] column = {
@@ -668,7 +631,7 @@ public class Gui extends JFrame {
 
         JButton btnReset = button("Reset");
         JButton btnUpdate = button("Update");
-        JButton menuBtn = menuButton("Menu");
+        JButton menuBtn = menuButton();
         bottomPanel.add(btnReset);
         bottomPanel.add(btnUpdate);
         bottomPanel.add(menuBtn);
@@ -692,7 +655,7 @@ public class Gui extends JFrame {
                 if (status.equals("success")) {
                     try {
                         Formatter formatter = new Formatter("src/assets/files/doctorAvailableTimes.txt");
-                        formatter.format("%s", (String) cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
+                        formatter.format("%s", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
                         formatter.close();
                         message = "success";
                     } catch (Exception exception) {
@@ -762,8 +725,7 @@ public class Gui extends JFrame {
         }
     }
 
-    private String initPatient() {
-        String status;
+    private void initPatient() {
         try {
             File myObj = new File("src/assets/files/patientsList.txt");
             Scanner myReader = new Scanner(myObj);
@@ -777,12 +739,10 @@ public class Gui extends JFrame {
             }
 
             myReader.close();
-            status = "success";
-        } catch (Exception var7) {
-            status = "error";
+        } catch (Exception exception) {
+            showErrorMessageDialog();
         }
 
-        return status;
     }
 
     private String initAvailableTimes() {
@@ -853,11 +813,11 @@ public class Gui extends JFrame {
         return null;
     }
 
-    private String saveConsultation(String fileName) {
+    private String saveConsultation() {
         String message;
         try {
             System.out.println(consultations);
-            Formatter formatter = new Formatter(fileName);
+            Formatter formatter = new Formatter("src/assets/files/consultations.txt");
             if (consultations.size() > 0) {
                 for (Consultation consultation : consultations) {
                     formatter.format("%s", consultation.toString());
@@ -891,10 +851,10 @@ public class Gui extends JFrame {
         return lbl;
     }
 
-    private JLabel mainHeader(String text) {
-        JLabel label = new JLabel(text);
+    private JLabel mainHeader() {
+        JLabel label = new JLabel("SKIN CONSULTATION CENTRE");
         label.setForeground(new Color(2, 48, 71));
-        label.setFont(new Font("Calibri", Font.BOLD, 42));
+        label.setFont(new Font("Calibre", Font.BOLD, 42));
         label.setBorder(BorderFactory.createEmptyBorder(50, 20, 20, 20));
         return label;
     }
@@ -902,7 +862,7 @@ public class Gui extends JFrame {
     private JLabel details(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(new Color(222, 236, 239));
-        label.setFont(new Font("Calibri", Font.PLAIN, 35));
+        label.setFont(new Font("Calibre", Font.PLAIN, 35));
         label.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
         return label;
     }
@@ -931,8 +891,8 @@ public class Gui extends JFrame {
         return btn;
     }
 
-    private JButton menuButton(String text) {
-        JButton btn = new JButton(text);
+    private JButton menuButton() {
+        JButton btn = new JButton("Menu");
         btn.setFont(new Font(null, Font.BOLD, 15));
         btn.setForeground(new Color(255, 255, 255));
         btn.setBackground(new Color(0, 150, 199));
