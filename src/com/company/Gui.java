@@ -4,8 +4,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
@@ -120,8 +118,8 @@ public class Gui extends JFrame {
         JPanel subPanel = new JPanel();
 
         ImageIcon icon1 = new ImageIcon("src/assets/images/img1.jpg");
-        Image img1 = icon1.getImage() ;
-        Image newImg1 = img1.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        Image img1 = icon1.getImage();
+        Image newImg1 = img1.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
         icon1 = new ImageIcon(newImg1);
         JButton btn1 = new JButton(icon1);
         btn1.setToolTipText("Add Consultations");
@@ -129,8 +127,8 @@ public class Gui extends JFrame {
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
         ImageIcon icon2 = new ImageIcon("src/assets/images/img2.jpg");
-        Image img2 = icon2.getImage() ;
-        Image newImg2 = img2.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        Image img2 = icon2.getImage();
+        Image newImg2 = img2.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
         icon2 = new ImageIcon(newImg2);
         JButton btn2 = new JButton(icon2);
         btn2.setToolTipText("Check Doctor Availability");
@@ -138,8 +136,8 @@ public class Gui extends JFrame {
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
         ImageIcon icon3 = new ImageIcon("src/assets/images/img3.jpg");
-        Image img3 = icon3.getImage() ;
-        Image newImg3 = img3.getScaledInstance( 150, 150,  java.awt.Image.SCALE_SMOOTH ) ;
+        Image img3 = icon3.getImage();
+        Image newImg3 = img3.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
         icon3 = new ImageIcon(newImg3);
         JButton btn3 = new JButton(icon3);
         btn3.setToolTipText("Saved Consultations");
@@ -642,7 +640,7 @@ public class Gui extends JFrame {
 
         JScrollPane sp = new JScrollPane(table);
         sp.setSize(5, 5);
-        JPanel doctorAvailabilityTimes =new JPanel();
+        JPanel doctorAvailabilityTimes = new JPanel();
 
         doctorAvailabilityTimes.setLayout(new GridLayout(1, 2));
 
@@ -759,7 +757,7 @@ public class Gui extends JFrame {
             Scanner myReader = new Scanner(myObj);
             this.patientList.clear();
 
-            while(myReader.hasNextLine()) {
+            while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] arr = data.split(",");
                 Patient initPatient = new Patient(arr[0], arr[1], arr[2], arr[3], Integer.parseInt(arr[4]));
@@ -965,7 +963,7 @@ public class Gui extends JFrame {
         JLabel lbl = new JLabel("");
         JTextField aa = new JTextField();
         char c = evt.getKeyChar();
-        if(Character.isLetter(c)) {
+        if (Character.isLetter(c)) {
             aa.setEditable(false);
             lbl.setText("Numbers Only");
         } else {
