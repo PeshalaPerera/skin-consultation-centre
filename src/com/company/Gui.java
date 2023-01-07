@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -85,9 +86,6 @@ public class Gui extends JFrame {
             start();
         });
 
-        JButton mainMenu = menuButton();
-
-        bottomPanel.add(mainMenu);
         bottomPanel.add(refresh);
         bottomPanel.add(exit);
         mainConsultantsPanel.add(sp, BorderLayout.CENTER);
@@ -156,22 +154,25 @@ public class Gui extends JFrame {
 
         btn1.addActionListener(e -> {
             JFrame frame = new JFrame();
+            frame.setTitle("Add Consultation");
             frame.add(addConsultation());
-            frame.setSize(500, 700);
+            frame.setSize(500, 600);
             frame.setVisible(true);
         });
 
         btn2.addActionListener(e -> {
             JFrame frame = new JFrame();
+            frame.setTitle("Doctor Availability");
             frame.add(doctorAvailability());
-            frame.setSize(500, 500);
+            frame.setSize(500, 600);
             frame.setVisible(true);
         });
 
         btn3.addActionListener(e -> {
             JFrame frame = new JFrame();
+            frame.setTitle("Saved Consultations");
             frame.add(savedConsultations());
-            frame.setSize(500, 700);
+            frame.setSize(500, 600);
             frame.setVisible(true);
         });
 
@@ -202,9 +203,6 @@ public class Gui extends JFrame {
         JLabel mainHeading = mainHeading("Saved Consultations");
         headerPanel.add(mainHeading);
 
-        JButton menuBtn = menuButton();
-        bottomPanel.add(menuBtn);
-
         ArrayList<String[]> doctorList = getDoctorFileContent();
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
@@ -223,7 +221,7 @@ public class Gui extends JFrame {
         table.setAutoCreateRowSorter(true);
         table.setBackground(new Color(202, 240, 248));
         table.setShowVerticalLines(true);
-        table.setPreferredScrollableViewportSize(new Dimension(400, 465));
+        table.setPreferredScrollableViewportSize(new Dimension(400, 400));
 
         JScrollPane sp = new JScrollPane(table);
         topPanel.add(sp);
@@ -303,8 +301,8 @@ public class Gui extends JFrame {
     }
 
     private JPanel addConsultationsPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panel.setBackground(new Color(255, 255, 255));
+        JPanel addConsultationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        addConsultationPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
         JPanel topPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
@@ -371,8 +369,8 @@ public class Gui extends JFrame {
         topPanel.add(lblNotes);
         topPanel.add(txtNotes);
 
-        EncryptDecryptString encryptDecryptString = new EncryptDecryptString();
-        EncryptDecryptString.update("Hi");
+//        String originalInput = "test input";
+        String encodedString = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
 
         JLabel images = label("Images");
         JLabel jLabelImage = new JLabel();
@@ -408,19 +406,6 @@ public class Gui extends JFrame {
         JLabel lblMessage = new JLabel();
         topPanel.add(lblMessage);
 
-/*        KeyListener keyListener = new KeyListener(){
-            public void keyTyped(KeyEvent keyEvent) {
-                printIt("Typed", keyEvent);
-            }
-        }
-        char c = keyListener.getKeyChar();
-        if(Character.isLetter(c)) {
-            txtPatientMobileNo.setEditable(false);
-            lblMessage.setText("Numbers Only");
-        } else {
-            txtPatientMobileNo.setEditable(true);
-        }*/
-
         GridLayout formLayout = new GridLayout(10, 2);
         formLayout.setHgap(5);
         formLayout.setVgap(5);
@@ -430,20 +415,18 @@ public class Gui extends JFrame {
         JButton btnReset = button("Reset");
         JButton btnRandom = button("Assign Doctor");
         JButton btnAdd = button("Add Consultation");
-        JButton menuBtn = menuButton();
         bottomPanel.add(btnReset);
         bottomPanel.add(btnRandom);
         bottomPanel.add(btnAdd);
-        bottomPanel.add(menuBtn);
 
         BorderLayout layout = new BorderLayout();
-        panel.setLayout(layout);
+        addConsultationPanel.setLayout(layout);
 
         headerPanel.setLayout(new GridLayout(2, 1));
 
-        panel.add(headerPanel, BorderLayout.NORTH);
-        panel.add(topPanel, BorderLayout.CENTER);
-        panel.add(bottomPanel, BorderLayout.SOUTH);
+        addConsultationPanel.add(headerPanel, BorderLayout.NORTH);
+        addConsultationPanel.add(topPanel, BorderLayout.CENTER);
+        addConsultationPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         btnAdd.addActionListener(ae -> {
             if ((txtPatientName.getText().trim().length() > 0) &&
@@ -453,7 +436,7 @@ public class Gui extends JFrame {
                     (txtPatientNIC.getText().trim().length() > 0) &&
                     (txtConsultationHours.getText().trim().length() > 0) &&
                     (txtNotes.getText().trim().length() > 0)) {
-                if (JOptionPane.showConfirmDialog(mainPanel,
+                if (JOptionPane.showConfirmDialog(addConsultationPanel,
                         "Are you sure you want to save consultation?", "Select an Option?",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
@@ -479,10 +462,8 @@ public class Gui extends JFrame {
                     Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
                     txtCost.setText(String.valueOf(consultationCost));
                     double txtCostValue = Double.parseDouble(txtCost.getText());
-                    //String txtNotesValue = encryptedNote;
-                    String txtNotesValue = textField().getText();
 
-                    Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
+                    Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, encodedString);
                     consultations.add(consultation);
                     patientList.add(patient);
 
@@ -491,11 +472,11 @@ public class Gui extends JFrame {
                         showMessageDialog("Consultation Added Successfully...");
                         btnReset.doClick();
                     } else {
-                        showErrorMessageDialog();
+                        showErrorMessageDialog(addConsultationPanel);
                     }
                 }
             } else {
-                showWarningDialog("All the fields should be required");
+                showWarningDialog("All the fields should be required", addConsultationPanel);
             }
         });
 
@@ -522,13 +503,13 @@ public class Gui extends JFrame {
             }
         });
 
-        return panel;
+        return addConsultationPanel;
     }
 
     private JPanel doctorAvailabilityPanel() {
         JScrollPane scrollPane = new JScrollPane();
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panel.setBackground(new Color(255, 255, 255));
+        JPanel doctorAvailabilityJPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        doctorAvailabilityJPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
         JPanel topPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
@@ -557,11 +538,13 @@ public class Gui extends JFrame {
         dateFromPanel.add(lblDoctorAvailableTimeFrom);
         dateFromPanel.add(btnFromDate);
 
+        //dateFromPanel.setLayout();
+
         dateToPanel.add(lblDoctorAvailableTimeTo);
         dateToPanel.add(btnToDate);
 
-        topPanel.add(lblDoctorAvailableTimeFrom);
-        topPanel.add(lblDoctorAvailableTimeTo);
+        //dateToPanel.setLayout();
+
         topPanel.add(dateFromPanel);
         topPanel.add(dateToPanel);
 
@@ -578,7 +561,7 @@ public class Gui extends JFrame {
         ArrayList<String[]> timesList = getTimesFileContent();
 
         String[][] data = timesList.toArray(String[][]::new);
-        String[] column = { "Medical Licence Number", "Date From", "Date To" };
+        String[] column = {"Medical Licence Number", "Date From", "Date To"};
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
         table.getTableHeader().setOpaque(false);
@@ -592,6 +575,8 @@ public class Gui extends JFrame {
         table.setAutoCreateRowSorter(true);
         table.setBackground(new Color(202, 240, 248));
         table.setShowVerticalLines(true);
+        table.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        table.setPreferredScrollableViewportSize(new Dimension(400, 200));
 
         JScrollPane sp = new JScrollPane(table);
         JPanel doctorAvailabilityTimes = new JPanel();
@@ -602,47 +587,50 @@ public class Gui extends JFrame {
 
         JButton btnReset = button("Reset");
         JButton btnUpdate = button("Update");
-        JButton menuBtn = menuButton();
         bottomPanel.add(btnReset);
         bottomPanel.add(btnUpdate);
-        bottomPanel.add(menuBtn);
 
         BorderLayout layout = new BorderLayout();
-        panel.setLayout(layout);
+        doctorAvailabilityJPanel.setLayout(layout);
 
         headerPanel.setLayout(new GridLayout(2, 1));
 
-        panel.add(headerPanel, BorderLayout.NORTH);
-        panel.add(topPanel, BorderLayout.CENTER);
-        panel.add(bottomPanel, BorderLayout.SOUTH);
+        doctorAvailabilityJPanel.add(headerPanel, BorderLayout.NORTH);
+        doctorAvailabilityJPanel.add(topPanel, BorderLayout.CENTER);
+        doctorAvailabilityJPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         btnUpdate.addActionListener(ae -> {
-            if (JOptionPane.showConfirmDialog(mainPanel,
-                    "Are you sure?", "Select an Option?",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                String status = initAvailableTimes();
-                String message;
-                if (status.equals("success")) {
-                    try {
-                        FileWriter fileWriter = new FileWriter("assets/files/doctorAvailableTimes.txt", true);
-                        Formatter formatter = new Formatter(fileWriter);
-                        formatter.format("%s\n", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
-                        formatter.close();
-                        message = "success";
-                    } catch (Exception exception) {
-                        message = "error";
-                    }
+            if ((lblDoctorAvailableTimeFrom.getText().trim().length() > 0) &&
+                    (lblDoctorAvailableTimeTo.getText().trim().length() > 0)) {
+                if (JOptionPane.showConfirmDialog(doctorAvailabilityJPanel,
+                        "Are you sure?", "Select an Option?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                    String status = initAvailableTimes();
+                    String message;
+                    if (status.equals("success")) {
+                        try {
+                            FileWriter fileWriter = new FileWriter("assets/files/doctorAvailableTimes.txt", true);
+                            Formatter formatter = new Formatter(fileWriter);
+                            formatter.format("%s\n", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
+                            formatter.close();
+                            message = "success";
+                        } catch (Exception exception) {
+                            message = "error";
+                        }
 
-                    if (message.equals("success")) {
-                        showMessageDialog("Updated Successfully...");
-                        btnReset.doClick();
+                        if (message.equals("success")) {
+                            showMessageDialog("Updated Successfully...");
+                            btnReset.doClick();
+                        } else {
+                            showErrorMessageDialog(doctorAvailabilityJPanel);
+                        }
                     } else {
-                        showErrorMessageDialog();
+                        showErrorMessageDialog(doctorAvailabilityJPanel);
                     }
-                } else {
-                    showErrorMessageDialog();
                 }
+            } else {
+                showWarningDialog("All the fields should be required", doctorAvailabilityJPanel);
             }
         });
 
@@ -652,9 +640,9 @@ public class Gui extends JFrame {
             lblDoctorAvailableTimeTo.setText("");
         });
 
-        scrollPane.add(panel);
+        scrollPane.add(doctorAvailabilityJPanel);
 
-        return panel;
+        return doctorAvailabilityJPanel;
     }
 
     private String initConsultations() {
@@ -712,9 +700,8 @@ public class Gui extends JFrame {
 
             myReader.close();
         } catch (Exception exception) {
-            showErrorMessageDialog();
+            showErrorMessageDialog(mainPanel);
         }
-
     }
 
     private String initAvailableTimes() {
@@ -863,19 +850,6 @@ public class Gui extends JFrame {
         return btn;
     }
 
-    private JButton menuButton() {
-        JButton btn = new JButton("Menu");
-        btn.setFont(new Font(null, Font.BOLD, 15));
-        btn.setForeground(new Color(255, 255, 255));
-        btn.setBackground(new Color(0, 150, 199));
-        btn.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        btn.addActionListener(e -> {
-            displayMenu();
-        });
-        return btn;
-    }
-
     private JButton dateButton(String text) {
         JButton btn = new JButton(text);
         btn.setForeground(new Color(144, 224, 239));
@@ -891,16 +865,16 @@ public class Gui extends JFrame {
         JOptionPane.showMessageDialog(mainPanel, lblMessage);
     }
 
-    private void showWarningDialog(String message) {
+    private void showWarningDialog(String message, JPanel panel) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText(message);
         lblMessage.setForeground(new Color(33, 232, 45, 255));
         lblMessage.setFont(new Font("Arial", Font.BOLD, 17));
-        JOptionPane.showMessageDialog(mainPanel, lblMessage, "Warning",
+        JOptionPane.showMessageDialog(panel, lblMessage, "Warning",
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    private void showErrorMessageDialog() {
+    private void showErrorMessageDialog(JPanel panel) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText("An Error Occurred!!!");
         lblMessage.setForeground(new Color(227, 4, 69));
@@ -919,15 +893,5 @@ public class Gui extends JFrame {
         } else {
             aa.setEditable(true);
         }
-    }
-
-    private void displayMenu() {
-        mainPanel.removeAll();
-        mainPanel.repaint();
-        mainPanel.revalidate();
-
-        mainPanel.add(welcomePanel);
-        mainPanel.repaint();
-        mainPanel.revalidate();
     }
 }
