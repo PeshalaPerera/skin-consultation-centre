@@ -5,15 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WestminsterSkinConsultationManagerTest {
+    WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager();
 
     @Test
     void addDoctor() {
-        WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager();
-
-    }
-
-    @Test
-    void testAddDoctor() {
+        manager.addDoctor();
     }
 
     @Test
@@ -26,5 +22,9 @@ class WestminsterSkinConsultationManagerTest {
 
     @Test
     void saveFile() {
+    }
+
+    @Test
+    void viewGui() {
     }
 }

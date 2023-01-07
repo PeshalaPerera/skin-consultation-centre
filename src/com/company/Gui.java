@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
@@ -441,6 +443,19 @@ public class Gui extends JFrame {
         JLabel lblMessage = new JLabel();
         topPanel.add(lblMessage);
 
+/*        KeyListener keyListener = new KeyListener(){
+            public void keyTyped(KeyEvent keyEvent) {
+                printIt("Typed", keyEvent);
+            }
+        }
+        char c = keyListener.getKeyChar();
+        if(Character.isLetter(c)) {
+            txtPatientMobileNo.setEditable(false);
+            lblMessage.setText("Numbers Only");
+        } else {
+            txtPatientMobileNo.setEditable(true);
+        }*/
+
         GridLayout formLayout = new GridLayout(10, 2);
         formLayout.setHgap(5);
         formLayout.setVgap(5);
@@ -476,46 +491,56 @@ public class Gui extends JFrame {
         });
 
         btnAdd.addActionListener(ae -> {
-            if (JOptionPane.showConfirmDialog(mainPanel,
-                    "Are you sure you want to save consultation?", "Select an Option?",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                String status = initConsultations();
-                if (status.equals("error")) {
-                    lblMessage.setText("Could not load the data!!!");
+            if ((txtPatientName.getText().trim().length() > 0) &&
+                    (txtPatientSurname.getText().trim().length() > 0) &&
+                    (lblPatientDOBVal.getText().trim().length() > 0) &&
+                    (txtPatientMobileNo.getText().trim().length() > 0) &&
+                    (txtPatientNIC.getText().trim().length() > 0) &&
+                    (txtConsultationHours.getText().trim().length() > 0) &&
+                    (txtNotes.getText().trim().length() > 0)) {
+                if (JOptionPane.showConfirmDialog(mainPanel,
+                        "Are you sure you want to save consultation?", "Select an Option?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                    String status = initConsultations();
+                    if (status.equals("error")) {
+                        lblMessage.setText("Could not load the data!!!");
+                    }
+
+                    initDoctor();
+                    initPatient();
+                    initConsultations();
+
+                    String txtPatientNameValue = txtPatientName.getText();
+                    String txtPatientSurnameValue = txtPatientSurname.getText();
+                    String txtPatientDOBValue = lblPatientDOBVal.getText();
+                    String txtPatientMobileNoValue = txtPatientMobileNo.getText();
+                    int txtPatientNICValue = parseInt(txtPatientNIC.getText());
+
+                    Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
+
+                    String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
+                    Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
+                    Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
+                    txtCost.setText(String.valueOf(consultationCost));
+                    double txtCostValue = Double.parseDouble(txtCost.getText());
+                    //String txtNotesValue = encryptedNote;
+                    String txtNotesValue = textField().getText();
+
+                    Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
+                    consultations.add(consultation);
+                    patientList.add(patient);
+
+                    String message = saveConsultation();
+                    if (message.equals("success")) {
+                        showMessageDialog("Consultation Added Successfully...");
+                        btnReset.doClick();
+                    } else {
+                        showErrorMessageDialog();
+                    }
                 }
-
-                initDoctor();
-                initPatient();
-                initConsultations();
-
-                String txtPatientNameValue = txtPatientName.getText();
-                String txtPatientSurnameValue = txtPatientSurname.getText();
-                String txtPatientDOBValue = lblPatientDOBVal.getText();
-                String txtPatientMobileNoValue = txtPatientMobileNo.getText();
-                int txtPatientNICValue = parseInt(txtPatientNIC.getText());
-
-                Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
-
-                String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
-                Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
-                Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
-                txtCost.setText(String.valueOf(consultationCost));
-                double txtCostValue = Double.parseDouble(txtCost.getText());
-                //String txtNotesValue = encryptedNote;
-                String txtNotesValue = textField().getText();
-
-                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
-                consultations.add(consultation);
-                patientList.add(patient);
-
-                String message = saveConsultation();
-                if (message.equals("success")) {
-                    showMessageDialog("Consultation Added Successfully...");
-                    btnReset.doClick();
-                } else {
-                    showErrorMessageDialog();
-                }
+            } else {
+                showWarningDialog("All the fields should be required");
             }
         });
 
@@ -857,7 +882,7 @@ public class Gui extends JFrame {
     private JLabel mainHeader() {
         JLabel label = new JLabel("SKIN CONSULTATION CENTRE");
         label.setForeground(new Color(2, 48, 71));
-        label.setFont(new Font("Calibre", Font.BOLD, 42));
+        label.setFont(new Font("Calibre", Font.BOLD, 32));
         label.setBorder(BorderFactory.createEmptyBorder(50, 20, 20, 20));
         return label;
     }
@@ -865,7 +890,7 @@ public class Gui extends JFrame {
     private JLabel details(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(new Color(222, 236, 239));
-        label.setFont(new Font("Calibre", Font.PLAIN, 35));
+        label.setFont(new Font("Calibre", Font.PLAIN, 28));
         label.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
         return label;
     }
@@ -881,7 +906,7 @@ public class Gui extends JFrame {
     private JTextField textField() {
         JTextField txtField = new JTextField();
         txtField.setFont(new Font(null, Font.PLAIN, 15));
-        txtField.setForeground(new Color(2, 62, 138));
+        txtField.setForeground(new Color(0, 0, 0));
         return txtField;
     }
 
@@ -918,6 +943,15 @@ public class Gui extends JFrame {
         JOptionPane.showMessageDialog(mainPanel, lblMessage);
     }
 
+    private void showWarningDialog(String message) {
+        JLabel lblMessage = new JLabel();
+        lblMessage.setText(message);
+        lblMessage.setForeground(new Color(33, 232, 45, 255));
+        lblMessage.setFont(new Font("Arial", Font.BOLD, 17));
+        JOptionPane.showMessageDialog(mainPanel, lblMessage, "Warning",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
     private void showErrorMessageDialog() {
         JLabel lblMessage = new JLabel();
         lblMessage.setText("An Error Occurred!!!");
@@ -925,5 +959,17 @@ public class Gui extends JFrame {
         lblMessage.setFont(new Font("Arial", Font.BOLD, 17));
         JOptionPane.showMessageDialog(mainPanel, lblMessage,
                 "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void jTextFieldKeyPressed(java.awt.event.KeyEvent evt) {
+        JLabel lbl = new JLabel("");
+        JTextField aa = new JTextField();
+        char c = evt.getKeyChar();
+        if(Character.isLetter(c)) {
+            aa.setEditable(false);
+            lbl.setText("Numbers Only");
+        } else {
+            aa.setEditable(true);
+        }
     }
 }
