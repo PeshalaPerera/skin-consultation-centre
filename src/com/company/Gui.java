@@ -18,6 +18,9 @@ import static java.lang.Integer.parseInt;
 public class Gui extends JFrame {
     JPanel mainPanel = new JPanel();
     JPanel welcomePanel = new JPanel();
+    JPanel addConsultationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    JPanel doctorAvailabilityJPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    JPanel savedConsultationsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
     ArrayList<Patient> patientList = new ArrayList<>();
     ArrayList<Consultation> consultations = new ArrayList<>();
     ArrayList<Doctor> doctorList = new ArrayList<>();
@@ -192,8 +195,7 @@ public class Gui extends JFrame {
     }
 
     private JPanel savedConsultations() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panel.setBackground(new Color(255, 255, 255));
+        savedConsultationsPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
         JPanel topPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
@@ -227,15 +229,15 @@ public class Gui extends JFrame {
         topPanel.add(sp);
 
         BorderLayout layout = new BorderLayout();
-        panel.setLayout(layout);
+        savedConsultationsPanel.setLayout(layout);
 
         headerPanel.setLayout(new GridLayout(2, 1));
 
-        panel.add(headerPanel, BorderLayout.NORTH);
-        panel.add(topPanel, BorderLayout.CENTER);
-        panel.add(bottomPanel, BorderLayout.SOUTH);
+        savedConsultationsPanel.add(headerPanel, BorderLayout.NORTH);
+        savedConsultationsPanel.add(topPanel, BorderLayout.CENTER);
+        savedConsultationsPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        return panel;
+        return savedConsultationsPanel;
     }
 
     private JTable consultantsTable() {
@@ -301,7 +303,6 @@ public class Gui extends JFrame {
     }
 
     private JPanel addConsultationsPanel() {
-        JPanel addConsultationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         addConsultationPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
         JPanel topPanel = new JPanel();
@@ -508,7 +509,6 @@ public class Gui extends JFrame {
 
     private JPanel doctorAvailabilityPanel() {
         JScrollPane scrollPane = new JScrollPane();
-        JPanel doctorAvailabilityJPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         doctorAvailabilityJPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
         JPanel topPanel = new JPanel();
