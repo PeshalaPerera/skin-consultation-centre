@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager();
+        WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(System.in);
         String choice;
         do {
             showMenu();

@@ -1,7 +1,7 @@
 package com.company;
 
 public interface SkinConsultationManager {
-    void addDoctor();
+    Doctor addDoctor();
 
     void deleteDoctor();
 

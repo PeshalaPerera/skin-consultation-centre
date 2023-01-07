@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -8,17 +9,19 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 public class WestminsterSkinConsultationManager implements SkinConsultationManager {
-    static Scanner scan = new Scanner(System.in);
+    private final Scanner scan;
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<Doctor> deletedList = new ArrayList<>();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public WestminsterSkinConsultationManager() {
+    public WestminsterSkinConsultationManager(InputStream source) {
+        scan = new Scanner(source);
         initialise();
     }
 
     @Override
-    public void addDoctor() {
+    public Doctor addDoctor() {
+        Doctor doctor = null;
         try {
             if (doctorList.size() < 10) {
                 String name = getStringInput("Enter the Name");
@@ -28,11 +31,12 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
                 int medicalLicenceNo = getIntInput("Enter the Medical Licence Number");
                 String specialization = getStringInput("Enter the Specialization");
 
-                Doctor doctor = new Doctor(name, surname, mobileNo, dob, medicalLicenceNo, specialization);
+                doctor = new Doctor(name, surname, mobileNo, dob, medicalLicenceNo, specialization);
 
                 doctorList.add(doctor);
 
                 System.out.println("Successfully added doctor!\n");
+
             } else {
                 System.out.println("You can not add more doctors.");
                 System.out.println("Maximum number of doctors limit exceeded!!!\n");
@@ -40,6 +44,8 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Invalid Input!!!\n");
         }
+
+        return doctor;
     }
 
     @Override
