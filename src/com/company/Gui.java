@@ -98,18 +98,6 @@ public class Gui extends JFrame {
     private JPanel menuPanel() {
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JPanel instructionsPanel = new JPanel();
-        JPanel panel1 = new JPanel();
-        JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
-
-        panel1.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 10));
-        panel1.setBackground(new Color(255, 255, 255));
-
-        panel2.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 10));
-        panel2.setBackground(new Color(255, 255, 255));
-
-        panel3.setBorder(BorderFactory.createLineBorder(new Color(0, 119, 182), 10));
-        panel3.setBackground(new Color(255, 255, 255));
 
         welcomePanel.setBorder(BorderFactory.createLineBorder(new Color(144, 224, 239), 10));
         welcomePanel.setBackground(new Color(0, 119, 182));
@@ -166,14 +154,6 @@ public class Gui extends JFrame {
         mainPanel.add(welcomePanel);
 
         btn1.addActionListener(e -> {
-            //            mainPanel.removeAll();
-            //            mainPanel.repaint();
-            //            mainPanel.revalidate();
-            //
-            //            mainPanel.add(panel1);
-            //            mainPanel.repaint();
-            //            mainPanel.revalidate();
-
             JFrame frame = new JFrame();
             frame.add(addConsultation());
             frame.setSize(500, 700);
@@ -181,35 +161,13 @@ public class Gui extends JFrame {
         });
 
         btn2.addActionListener(e -> {
-            //            mainPanel.removeAll();
-            //            mainPanel.repaint();
-            //            mainPanel.revalidate();
-            //
-            //            mainPanel.add(panel2);
-            //            mainPanel.repaint();
-            //            mainPanel.revalidate();
-            //
-            //            //JPanel doctorAvailability = doctorAvailability();
-            //            panel2.add(doctorAvailability());
-            JPanel addConsultation = addConsultation();
             JFrame frame = new JFrame();
             frame.add(doctorAvailability());
-            frame.setSize(500, 700);
+            frame.setSize(500, 500);
             frame.setVisible(true);
         });
 
         btn3.addActionListener(e -> {
-            //            mainPanel.removeAll();
-            //            mainPanel.repaint();
-            //            mainPanel.revalidate();
-            //
-            //            mainPanel.add(panel3);
-            //            mainPanel.repaint();
-            //            mainPanel.revalidate();
-            //
-            //            JPanel savedConsultations = savedConsultations();
-            //            panel3.add(savedConsultations);
-
             JFrame frame = new JFrame();
             frame.add(savedConsultations());
             frame.setSize(500, 700);
@@ -640,10 +598,10 @@ public class Gui extends JFrame {
         sp.setSize(5, 5);
         JPanel doctorAvailabilityTimes = new JPanel();
 
-        doctorAvailabilityTimes.setLayout(new GridLayout(1, 2));
+//        doctorAvailabilityTimes.setLayout(new GridLayout(1, 2));
 
         doctorAvailabilityTimes.add(sp);
-        doctorAvailabilityTimes.add(new JButton("Test"));
+//        doctorAvailabilityTimes.add(new JButton("Test"));
 
         topPanel.add(doctorAvailabilityTimes);
 
