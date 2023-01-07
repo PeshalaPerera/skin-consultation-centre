@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -577,9 +578,8 @@ public class Gui extends JFrame {
         ArrayList<String[]> timesList = getTimesFileContent();
 
         String[][] data = timesList.toArray(String[][]::new);
-        String[] column = {
-                "Name", "Medical Licence Number", "Date From", "Date To"
-        };
+        String[] column = { "Medical Licence Number", "Date From", "Date To" };
+        System.out.println(Arrays.deepToString(data));
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
         table.getTableHeader().setOpaque(false);
@@ -595,21 +595,11 @@ public class Gui extends JFrame {
         table.setShowVerticalLines(true);
 
         JScrollPane sp = new JScrollPane(table);
-        sp.setSize(5, 5);
         JPanel doctorAvailabilityTimes = new JPanel();
 
-//        doctorAvailabilityTimes.setLayout(new GridLayout(1, 2));
-
         doctorAvailabilityTimes.add(sp);
-//        doctorAvailabilityTimes.add(new JButton("Test"));
 
         topPanel.add(doctorAvailabilityTimes);
-
-        GridLayout formLayout = new GridLayout(5, 2);
-        formLayout.setHgap(5);
-        formLayout.setVgap(5);
-
-        topPanel.setLayout(formLayout);
 
         JButton btnReset = button("Reset");
         JButton btnUpdate = button("Update");
