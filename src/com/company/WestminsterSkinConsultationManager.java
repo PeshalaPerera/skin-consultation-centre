@@ -1,14 +1,16 @@
 package com.company;
 
-import java.io.*;
-import java.text.ParseException;
+import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Formatter;
+import java.util.Scanner;
 
 public class WestminsterSkinConsultationManager implements SkinConsultationManager {
+    static Scanner scan = new Scanner(System.in);
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<Doctor> deletedList = new ArrayList<>();
-    static Scanner scan = new Scanner(System.in);
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public WestminsterSkinConsultationManager() {
@@ -64,7 +66,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     }
 
     @Override
-    public void printlist() {
+    public void printList() {
         try {
             if (doctorList.size() > 0) {
                 doctorList.sort(Comparator.comparing(d -> d.getSurname().toLowerCase()));

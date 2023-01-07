@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.Date;
-
 public class Doctor extends Person {
     private int medicalLicenceNo;
     private String specialization;
@@ -42,7 +40,7 @@ public class Doctor extends Person {
 
     public String toFormattedString() {
         return getName() + "," + getSurname() + "," + getDob() + ","
-                + getMobileNo() + "," + getMedicalLicenceNo() + "," +  getSpecialization() + "\n";
+                + getMobileNo() + "," + getMedicalLicenceNo() + "," + getSpecialization() + "\n";
     }
 
     /*public String identity() {
@@ -50,6 +48,6 @@ public class Doctor extends Person {
         return names;
     }*/
 
-//    {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"}
+    //    {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"}
 
 }

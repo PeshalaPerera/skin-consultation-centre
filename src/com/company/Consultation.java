@@ -59,7 +59,7 @@ public class Consultation {
 
     @Override
     public String toString() {
-        return  doctor.getMedicalLicenceNo() + "," +
+        return doctor.getMedicalLicenceNo() + "," +
                 patient.getId() + "," +
                 time + "," +
                 cost + "," +

@@ -5,7 +5,7 @@ public interface SkinConsultationManager {
 
     void deleteDoctor();
 
-    void printlist();
+    void printList();
 
     void saveFile();
 

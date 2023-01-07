@@ -20,7 +20,7 @@ public class Main {
                     manager.deleteDoctor();
                 }
                 case "C" -> {
-                    manager.printlist();
+                    manager.printList();
                 }
                 case "D" -> {
                     manager.saveFile();
@@ -31,23 +31,23 @@ public class Main {
                 case "X" -> System.out.println("Program Ended! \nThank you!");
                 default -> System.out.println("Invalid Input! Try Again!");
             }
-        } while(!choice.equals("X"));
+        } while (!choice.equals("X"));
 
     }
 
     private static void showMenu() {
         System.out.println(
                 "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n" +
-                "*-----------------------------------------------------*\n" +
-                "|          SKIN CONSULTATION CENTRE                   |\n" +
-                "*-----------------------------------------------------*\n" +
-                "|            A. ADD A NEW DOCTOR                      |\n" +
-                "|            B. DELETE A DOCTOR                       |\n" +
-                "|            C. PRINT THE LIST OF DOCTORS             |\n" +
-                "|            D. SAVE IN A FILE                        |\n" +
-                "|            E. GUI                                   |\n" +
-                "|            X. EXIT                                  |\n" +
-                "*-----------------------------------------------------*"
+                        "*-----------------------------------------------------*\n" +
+                        "|          SKIN CONSULTATION CENTRE                   |\n" +
+                        "*-----------------------------------------------------*\n" +
+                        "|            A. ADD A NEW DOCTOR                      |\n" +
+                        "|            B. DELETE A DOCTOR                       |\n" +
+                        "|            C. PRINT THE LIST OF DOCTORS             |\n" +
+                        "|            D. SAVE IN A FILE                        |\n" +
+                        "|            E. GUI                                   |\n" +
+                        "|            X. EXIT                                  |\n" +
+                        "*-----------------------------------------------------*"
         );
     }
 }

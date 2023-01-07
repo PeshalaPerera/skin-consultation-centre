@@ -1,8 +1,9 @@
 package com.company;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DatePicker {
     int month = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
@@ -13,11 +14,10 @@ public class DatePicker {
     JDialog d;
     JButton[] button = new JButton[49];
 
-
     public DatePicker(JFrame parent) {
         d = new JDialog();
         d.setModal(true);
-        String[] header = {"Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"};
+        String[] header = { "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat" };
         JPanel p1 = new JPanel(new GridLayout(7, 7));
         p1.setPreferredSize(new Dimension(430, 120));
         for (int x = 0; x < button.length; x++) {
@@ -27,7 +27,6 @@ public class DatePicker {
             button[x].setBackground(Color.white);
             if (x > 6) {
                 button[x].addActionListener(new ActionListener() {
-
 
                     public void actionPerformed(ActionEvent ae) {
                         day = button[selection].getActionCommand();
@@ -45,7 +44,6 @@ public class DatePicker {
         JButton previous = new JButton("<< Previous");
         previous.addActionListener(new ActionListener() {
 
-
             public void actionPerformed(ActionEvent ae) {
                 month--;
                 displayDate();
@@ -55,7 +53,6 @@ public class DatePicker {
         p2.add(l);
         JButton next = new JButton("Next >>");
         next.addActionListener(new ActionListener() {
-
 
             public void actionPerformed(ActionEvent ae) {
                 month++;
@@ -70,7 +67,6 @@ public class DatePicker {
         displayDate();
         d.setVisible(true);
     }
-
 
     public void displayDate() {
         for (int x = 7; x < button.length; x++) {
@@ -87,7 +83,6 @@ public class DatePicker {
         l.setText(sdf.format(cal.getTime()));
         d.setTitle("Calendar");
     }
-
 
     public String setPickedDate() {
         if (day.equals("")) {

@@ -7,8 +7,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
@@ -19,13 +20,6 @@ public class Gui extends JFrame {
     ArrayList<Consultation> consultations = new ArrayList<>();
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<String> times = new ArrayList<>();
-
-    public static void start() {
-        Gui gui = new Gui();
-        gui.setVisible(true);
-        gui.setSize(1100, 700);
-        gui.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    }
 
     public Gui() {
         super("Skin Consultation Centre");
@@ -50,6 +44,13 @@ public class Gui extends JFrame {
         actionPanel.add(consultantsPanel);
 
         add(mainTestPanel, BorderLayout.CENTER);
+    }
+
+    public static void start() {
+        Gui gui = new Gui();
+        gui.setVisible(true);
+        gui.setSize(1100, 700);
+        gui.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     private JPanel consultantsPanel() {
@@ -396,7 +397,7 @@ public class Gui extends JFrame {
         topPanel.add(txtNotes);
 
         EncryptDecryptString encryptDecryptString = new EncryptDecryptString();
-        encryptDecryptString.update("Hi");
+        EncryptDecryptString.update("Hi");
 
         JLabel images = label("Images");
         JLabel jLabelImage = new JLabel();

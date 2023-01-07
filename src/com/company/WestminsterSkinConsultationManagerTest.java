@@ -2,8 +2,6 @@ package com.company;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class WestminsterSkinConsultationManagerTest {
     WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager();
 
@@ -17,7 +15,7 @@ class WestminsterSkinConsultationManagerTest {
     }
 
     @Test
-    void printlist() {
+    void printList() {
     }
 
     @Test
@@ -26,5 +24,6 @@ class WestminsterSkinConsultationManagerTest {
 
     @Test
     void viewGui() {
+        Gui.start();
     }
 }
