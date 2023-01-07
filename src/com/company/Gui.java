@@ -118,7 +118,7 @@ public class Gui extends JFrame {
 
         JPanel subPanel = new JPanel();
 
-        ImageIcon icon1 = new ImageIcon("src/assets/images/img1.jpg");
+        ImageIcon icon1 = new ImageIcon("assets/images/img1.jpg");
         Image img1 = icon1.getImage();
         Image newImg1 = img1.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
         icon1 = new ImageIcon(newImg1);
@@ -127,7 +127,7 @@ public class Gui extends JFrame {
         btn1.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn1), BorderLayout.LINE_START);
 
-        ImageIcon icon2 = new ImageIcon("src/assets/images/img2.jpg");
+        ImageIcon icon2 = new ImageIcon("assets/images/img2.jpg");
         Image img2 = icon2.getImage();
         Image newImg2 = img2.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
         icon2 = new ImageIcon(newImg2);
@@ -136,7 +136,7 @@ public class Gui extends JFrame {
         btn2.setPreferredSize(new Dimension(150, 150));
         subPanel.add(new JPanel().add(btn2), BorderLayout.CENTER);
 
-        ImageIcon icon3 = new ImageIcon("src/assets/images/img3.jpg");
+        ImageIcon icon3 = new ImageIcon("assets/images/img3.jpg");
         Image img3 = icon3.getImage();
         Image newImg3 = img3.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
         icon3 = new ImageIcon(newImg3);
@@ -288,7 +288,7 @@ public class Gui extends JFrame {
     }
 
     private ArrayList<String[]> getDoctorFileContent() {
-        File myObj = new File("src/assets/files/doctorsList.txt");
+        File myObj = new File("assets/files/doctorsList.txt");
         ArrayList<String[]> doctorList = new ArrayList<>();
         Scanner myReader = null;
         try {
@@ -308,7 +308,7 @@ public class Gui extends JFrame {
     }
 
     private ArrayList<String[]> getTimesFileContent() {
-        File myObj = new File("src/assets/files/doctorAvailableTimes.txt");
+        File myObj = new File("assets/files/doctorAvailableTimes.txt");
         ArrayList<String[]> timesList = new ArrayList<>();
         Scanner myReader = null;
         try {
@@ -662,7 +662,7 @@ public class Gui extends JFrame {
                 String message;
                 if (status.equals("success")) {
                     try {
-                        Formatter formatter = new Formatter("src/assets/files/doctorAvailableTimes.txt");
+                        Formatter formatter = new Formatter("assets/files/doctorAvailableTimes.txt");
                         formatter.format("%s", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
                         formatter.close();
                         message = "success";
@@ -696,7 +696,7 @@ public class Gui extends JFrame {
     private String initConsultations() {
         String status;
         try {
-            File myObj = new File("src/assets/files/consultations.txt");
+            File myObj = new File("assets/files/consultations.txt");
             Scanner myReader = new Scanner(myObj);
             consultations.clear();
             while (myReader.hasNextLine()) {
@@ -718,7 +718,7 @@ public class Gui extends JFrame {
 
     private void initDoctor() {
         try {
-            File myObj = new File("src/assets/files/doctorsList.txt");
+            File myObj = new File("assets/files/doctorsList.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -735,7 +735,7 @@ public class Gui extends JFrame {
 
     private void initPatient() {
         try {
-            File myObj = new File("src/assets/files/patientsList.txt");
+            File myObj = new File("assets/files/patientsList.txt");
             Scanner myReader = new Scanner(myObj);
             this.patientList.clear();
 
@@ -756,7 +756,7 @@ public class Gui extends JFrame {
     private String initAvailableTimes() {
         String status;
         try {
-            File myObj = new File("src/assets/files/doctorAvailableTimes.txt");
+            File myObj = new File("assets/files/doctorAvailableTimes.txt");
             Scanner myReader = new Scanner(myObj);
             times.clear();
             while (myReader.hasNextLine()) {
@@ -825,7 +825,7 @@ public class Gui extends JFrame {
         String message;
         try {
             System.out.println(consultations);
-            Formatter formatter = new Formatter("src/assets/files/consultations.txt");
+            Formatter formatter = new Formatter("assets/files/consultations.txt");
             if (consultations.size() > 0) {
                 for (Consultation consultation : consultations) {
                     formatter.format("%s", consultation.toString());

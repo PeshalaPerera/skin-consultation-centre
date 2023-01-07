@@ -13,23 +13,34 @@ public class Main {
             System.out.print("\nYour Choice : ");
             choice = input.next().toUpperCase();
             switch (choice) {
-                case "A" -> {
+                case "A": {
                     manager.addDoctor();
+                    break;
                 }
-                case "B" -> {
+                case "B": {
                     manager.deleteDoctor();
+                    break;
                 }
-                case "C" -> {
+                case "C": {
                     manager.printList();
+                    break;
                 }
-                case "D" -> {
+                case "D": {
                     manager.saveFile();
+                    break;
                 }
-                case "E" -> {
+                case "E": {
                     manager.viewGui();
+                    break;
                 }
-                case "X" -> System.out.println("Program Ended! \nThank you!");
-                default -> System.out.println("Invalid Input! Try Again!");
+                case "X": {
+                    System.out.println("Program Ended! \nThank you!");
+                    break;
+                }
+                default: {
+                    System.out.println("Invalid Input! Try Again!");
+                    break;
+                }
             }
         } while (!choice.equals("X"));
 
