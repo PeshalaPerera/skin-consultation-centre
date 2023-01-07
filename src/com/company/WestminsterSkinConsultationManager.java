@@ -84,7 +84,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     @Override
     public void saveFile() {
         try {
-            Formatter formatter = new Formatter("src/doctorsList.txt");
+            Formatter formatter = new Formatter("doctorsList.txt");
             if (doctorList.size() > 0) {
                 for (Doctor doctor : doctorList) {
                     formatter.format("%s", doctor.toFormattedString());
@@ -106,7 +106,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
 
     private void initialise() {
         try {
-            File myObj = new File("src/doctorsList.txt");
+            File myObj = new File("doctorsList.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();

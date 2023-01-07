@@ -53,6 +53,10 @@ public class Gui extends JFrame {
         gui.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
+    public static void main(String[] args) {
+        start();
+    }
+
     private JPanel consultantsPanel() {
         JPanel mainConsultantsPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
@@ -638,7 +642,7 @@ public class Gui extends JFrame {
 
         doctorAvailabilityTimes.setLayout(new GridLayout(1, 2));
 
-        //doctorAvailabilityTimes.add(sp);
+        doctorAvailabilityTimes.add(sp);
         doctorAvailabilityTimes.add(new JButton("Test"));
 
         topPanel.add(doctorAvailabilityTimes);
@@ -977,9 +981,5 @@ public class Gui extends JFrame {
         mainPanel.add(welcomePanel);
         mainPanel.repaint();
         mainPanel.revalidate();
-    }
-
-    public static void main(String[] args) {
-        start();
     }
 }

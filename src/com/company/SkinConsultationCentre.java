@@ -109,7 +109,7 @@ public class SkinConsultationCentre extends JFrame {
     }
 
     private JTable consultantsTable() {
-        ArrayList<String[]> doctorList = getFileContent("src/doctorsList.txt");
+        ArrayList<String[]> doctorList = getFileContent("doctorsList.txt");
         String[][] data = doctorList.toArray(String[][]::new);
         String[] column = {
                 "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
@@ -241,7 +241,7 @@ public class SkinConsultationCentre extends JFrame {
                     Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
                     patientList.add(patient);
 
-                    String message = savePatient("src/patientsList.txt");
+                    String message = savePatient("patientsList.txt");
                     if (message.equals("success")) {
                         showMessageDialog("Patient Details Added Successfully...");
                         btnReset.doClick();
@@ -323,7 +323,7 @@ public class SkinConsultationCentre extends JFrame {
     private String initPatient() {
         String status;
         try {
-            File myObj = new File("src/patientsList.txt");
+            File myObj = new File("patientsList.txt");
             Scanner myReader = new Scanner(myObj);
             patientList.clear();
             while (myReader.hasNextLine()) {
@@ -517,7 +517,7 @@ public class SkinConsultationCentre extends JFrame {
                     "Are you sure you want to save consultation?", "Select an Option?",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                String status = initConsultations("src/consultations.txt");
+                String status = initConsultations("consultations.txt");
                 if (status == "error") {
                     lblMessage.setText("An Error Occurred!!!");
                 }
@@ -533,7 +533,7 @@ public class SkinConsultationCentre extends JFrame {
                 /*Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), getPatientByName(txtPatientNameValue, patientList), new Date(), txtCostValue, txtNotesValue);
                 consultations.add(consultation);*/
 
-                String message = saveConsultation("src/consultations.txt");
+                String message = saveConsultation("consultations.txt");
                 if (message.equals("success")) {
                     showMessageDialog("Consultation Added Successfully...");
                     btnReset.doClick();
@@ -618,7 +618,7 @@ public class SkinConsultationCentre extends JFrame {
     public JPanel savedConsultations() {
         JPanel panel = new JPanel();
 
-        ArrayList<String[]> savedConsultations = getFileContent("src/consultations.txt");
+        ArrayList<String[]> savedConsultations = getFileContent("consultations.txt");
         //String[][] data = savedConsultations.toArray(String[][]::new);
         String[][] data = {
                 { "Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes" },
@@ -727,7 +727,7 @@ public class SkinConsultationCentre extends JFrame {
 
     private void initDoctor() {
         try {
-            File myObj = new File("src/doctorsList.txt");
+            File myObj = new File("doctorsList.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
