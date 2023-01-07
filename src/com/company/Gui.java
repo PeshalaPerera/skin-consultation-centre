@@ -162,42 +162,54 @@ public class Gui extends JFrame {
         mainPanel.add(welcomePanel);
 
         btn1.addActionListener(e -> {
-            mainPanel.removeAll();
-            mainPanel.repaint();
-            mainPanel.revalidate();
+            //            mainPanel.removeAll();
+            //            mainPanel.repaint();
+            //            mainPanel.revalidate();
+            //
+            //            mainPanel.add(panel1);
+            //            mainPanel.repaint();
+            //            mainPanel.revalidate();
 
-            mainPanel.add(panel1);
-            mainPanel.repaint();
-            mainPanel.revalidate();
-
-            JPanel addConsultation = addConsultation();
-            panel1.add(addConsultation);
+            JFrame frame = new JFrame();
+            frame.add(addConsultation());
+            frame.setSize(500, 700);
+            frame.setVisible(true);
         });
 
         btn2.addActionListener(e -> {
-            mainPanel.removeAll();
-            mainPanel.repaint();
-            mainPanel.revalidate();
-
-            mainPanel.add(panel2);
-            mainPanel.repaint();
-            mainPanel.revalidate();
-
-            //JPanel doctorAvailability = doctorAvailability();
-            panel2.add(doctorAvailability());
+            //            mainPanel.removeAll();
+            //            mainPanel.repaint();
+            //            mainPanel.revalidate();
+            //
+            //            mainPanel.add(panel2);
+            //            mainPanel.repaint();
+            //            mainPanel.revalidate();
+            //
+            //            //JPanel doctorAvailability = doctorAvailability();
+            //            panel2.add(doctorAvailability());
+            JPanel addConsultation = addConsultation();
+            JFrame frame = new JFrame();
+            frame.add(doctorAvailability());
+            frame.setSize(500, 700);
+            frame.setVisible(true);
         });
 
         btn3.addActionListener(e -> {
-            mainPanel.removeAll();
-            mainPanel.repaint();
-            mainPanel.revalidate();
+            //            mainPanel.removeAll();
+            //            mainPanel.repaint();
+            //            mainPanel.revalidate();
+            //
+            //            mainPanel.add(panel3);
+            //            mainPanel.repaint();
+            //            mainPanel.revalidate();
+            //
+            //            JPanel savedConsultations = savedConsultations();
+            //            panel3.add(savedConsultations);
 
-            mainPanel.add(panel3);
-            mainPanel.repaint();
-            mainPanel.revalidate();
-
-            JPanel savedConsultations = savedConsultations();
-            panel3.add(savedConsultations);
+            JFrame frame = new JFrame();
+            frame.add(savedConsultations());
+            frame.setSize(500, 700);
+            frame.setVisible(true);
         });
 
         return mainPanel;
@@ -965,5 +977,9 @@ public class Gui extends JFrame {
         mainPanel.add(welcomePanel);
         mainPanel.repaint();
         mainPanel.revalidate();
+    }
+
+    public static void main(String[] args) {
+        start();
     }
 }
