@@ -6,9 +6,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -579,7 +579,6 @@ public class Gui extends JFrame {
 
         String[][] data = timesList.toArray(String[][]::new);
         String[] column = { "Medical Licence Number", "Date From", "Date To" };
-        System.out.println(Arrays.deepToString(data));
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
         table.getTableHeader().setOpaque(false);
@@ -626,8 +625,9 @@ public class Gui extends JFrame {
                 String message;
                 if (status.equals("success")) {
                     try {
-                        Formatter formatter = new Formatter("assets/files/doctorAvailableTimes.txt");
-                        formatter.format("%s", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
+                        FileWriter fileWriter = new FileWriter("assets/files/doctorAvailableTimes.txt", true);
+                        Formatter formatter = new Formatter(fileWriter);
+                        formatter.format("%s\n", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
                         formatter.close();
                         message = "success";
                     } catch (Exception exception) {
