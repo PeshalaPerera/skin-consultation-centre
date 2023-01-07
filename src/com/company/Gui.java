@@ -158,15 +158,6 @@ public class Gui extends JFrame {
 
         mainPanel.setLayout(new GridLayout(1, 1));
 
-        /*menuBtn.addActionListener(e -> {
-            mainPanel.removeAll();
-            mainPanel.repaint();
-            mainPanel.revalidate();
-
-            mainPanel.add(welcomePanel);
-            mainPanel.repaint();
-            mainPanel.revalidate();
-        });*/
         mainPanel.add(welcomePanel);
 
         btn1.addActionListener(e -> {
@@ -477,16 +468,6 @@ public class Gui extends JFrame {
         panel.add(headerPanel, BorderLayout.NORTH);
         panel.add(topPanel, BorderLayout.CENTER);
         panel.add(bottomPanel, BorderLayout.SOUTH);
-
-        menuBtn.addActionListener(e -> {
-            mainPanel.removeAll();
-            mainPanel.repaint();
-            mainPanel.revalidate();
-
-            mainPanel.add(welcomePanel);
-            mainPanel.repaint();
-            mainPanel.revalidate();
-        });
 
         btnAdd.addActionListener(ae -> {
             if ((txtPatientName.getText().trim().length() > 0) &&
@@ -923,6 +904,10 @@ public class Gui extends JFrame {
         btn.setForeground(new Color(255, 255, 255));
         btn.setBackground(new Color(0, 150, 199));
         btn.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        btn.addActionListener(e -> {
+            displayMenu();
+        });
         return btn;
     }
 
@@ -969,5 +954,15 @@ public class Gui extends JFrame {
         } else {
             aa.setEditable(true);
         }
+    }
+
+    private void displayMenu() {
+        mainPanel.removeAll();
+        mainPanel.repaint();
+        mainPanel.revalidate();
+
+        mainPanel.add(welcomePanel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
     }
 }
