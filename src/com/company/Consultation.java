@@ -75,7 +75,7 @@ public class Consultation {
                 patient.getDob() + "," +
                 patient.getMobileNo() + "," +
                 time + "," +
-                cost + ",£" +
+                cost + "," +
                 notes + "\n";
     }
 

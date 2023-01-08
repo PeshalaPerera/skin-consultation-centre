@@ -5,12 +5,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -31,7 +28,7 @@ public class Gui extends JFrame {
 
     public Gui() {
         super("Skin Consultation Centre");
-        ImageIcon icon = new ImageIcon("assets/images/img1.jpg");
+        ImageIcon icon = new ImageIcon("assets/images/img3.jpg");
         JPanel mainTestPanel = new JPanel();
         setIconImage(icon.getImage());
         BorderLayout layout = new BorderLayout();
@@ -213,7 +210,7 @@ public class Gui extends JFrame {
         ArrayList<String[]> consultationsList = getSavedConsultationsContent();
         String[][] data = consultationsList.toArray(String[][]::new);
         String[] column = {
-                "Medical License Number", "NIC", "Patient Name", "Patient Surname", "DOB", "Mobile Number", "Time", "Cost", "Notes"
+                "Medical License Number", "NIC", "Patient Name", "Patient Surname", "DOB", "Mobile Number", "Time", "Cost(£)", "Notes"
         };
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
@@ -238,7 +235,7 @@ public class Gui extends JFrame {
         columnModel.getColumn(5).setPreferredWidth(150);
         columnModel.getColumn(6).setPreferredWidth(100);
         columnModel.getColumn(7).setMinWidth(80);
-        columnModel.getColumn(8).setMinWidth(150);
+        columnModel.getColumn(8).setPreferredWidth(150);
 
         JScrollPane sp = new JScrollPane(table);
         topPanel.add(sp);
@@ -326,7 +323,6 @@ public class Gui extends JFrame {
     }
 
     private ArrayList<String[]> getAvailableTimesContent(String name) {
-        System.out.println(name);
         File myObj = new File("assets/files/doctorAvailableTimes.txt");
         ArrayList<String[]> availableTimesList = new ArrayList<>();
         Scanner myReader = null;
@@ -428,14 +424,12 @@ public class Gui extends JFrame {
 
         JLabel lblTime = label("Select Time");
         JComboBox jComboBox = new JComboBox();
-        cbDoctorNames.addActionListener (new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jComboBox.removeAllItems();
-                String cbDoctorVal = (String) cbDoctorNames.getSelectedItem();
-                ArrayList<String[]> dateTimeDropdown = getAvailableTimesContent(cbDoctorVal);
-                for (String[] date : dateTimeDropdown) {
-                    jComboBox.addItem(date[1]);
-                }
+        cbDoctorNames.addActionListener (e -> {
+            jComboBox.removeAllItems();
+            String cbDoctorVal = (String) cbDoctorNames.getSelectedItem();
+            ArrayList<String[]> dateTimeDropdown = getAvailableTimesContent(cbDoctorVal);
+            for (String[] date : dateTimeDropdown) {
+                jComboBox.addItem(date[1]);
             }
         });
 
@@ -544,9 +538,18 @@ public class Gui extends JFrame {
                         Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
                         Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
                         txtCost.setText(String.valueOf(consultationCost));
+                        String txtNotesValues = txtNotes.getText();
                         double txtCostValue = Double.parseDouble(txtCost.getText());
-                        String txtNotesValue = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
-                        String fullNote = txtNotesValue + "  Uploaded Image Path: " + selectedImagePath;
+                        String textNote = "";
+                        if (selectedImagePath != null) {
+                            String uploadedImagePath = "  Uploaded Image Path: " + selectedImagePath;
+                            if (uploadedImagePath != null) {
+                                textNote = txtNotesValues + uploadedImagePath;
+                            }
+                        } else {
+                            textNote = txtNotesValues;
+                        }
+                        String fullNote = Base64.getEncoder().encodeToString(textNote.getBytes());
                         DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                         String time = (String) jComboBox.getSelectedItem();
                         LocalDateTime timeSlot = LocalDateTime.parse(time, localDateFormatter);
@@ -748,9 +751,10 @@ public class Gui extends JFrame {
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
                 LocalDateTime date = LocalDateTime.parse(String.valueOf(arr[2]));
-                //byte[] decodedBytes = Base64.getDecoder().decode(arr[4]);
-                //String decodedString = new String(decodedBytes);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), arr[4]);
+                String encodedString = String.valueOf(arr[4]);
+                byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+                String decodedString = new String(decodedBytes);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), decodedString);
                 consultations.add(initConsultation);
             }
             myReader.close();
@@ -1015,17 +1019,5 @@ public class Gui extends JFrame {
         lblMessage.setFont(new Font("Arial", Font.BOLD, 17));
         JOptionPane.showMessageDialog(mainPanel, lblMessage,
                 "Error", JOptionPane.WARNING_MESSAGE);
-    }
-
-    private void jTextFieldKeyPressed(java.awt.event.KeyEvent evt) {
-        JLabel lbl = new JLabel("");
-        JTextField aa = new JTextField();
-        char c = evt.getKeyChar();
-        if (Character.isLetter(c)) {
-            aa.setEditable(false);
-            lbl.setText("Numbers Only");
-        } else {
-            aa.setEditable(true);
-        }
     }
 }
