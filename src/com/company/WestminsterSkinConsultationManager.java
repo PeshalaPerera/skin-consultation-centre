@@ -20,7 +20,8 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     }
 
     @Override
-    public void addDoctor() {
+    public Doctor addDoctor() {
+        Doctor doctor = null;
         try {
             if (doctorList.size() < 10) {
                 String name = getStringInput("Enter the Name");
@@ -29,9 +30,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
                 String dob = getStringInput("Enter the date of birth");
                 int medicalLicenceNo = getIntInput("Enter the Medical Licence Number");
                 String specialization = getStringInput("Enter the Specialization");
-
-                Doctor doctor = new Doctor(name, surname, mobileNo, dob, medicalLicenceNo, specialization);
-
+                doctor = new Doctor(name, surname, mobileNo, dob, medicalLicenceNo, specialization);
                 doctorList.add(doctor);
 
                 System.out.println("Successfully added doctor!\n");
@@ -42,6 +41,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Invalid Input!!!\n");
         }
+        return doctor;
     }
 
     @Override
