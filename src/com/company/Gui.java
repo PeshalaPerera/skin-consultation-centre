@@ -27,10 +27,13 @@ public class Gui extends JFrame {
     ArrayList<Consultation> consultations = new ArrayList<>();
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<String> times = new ArrayList<>();
+    String selectedImagePath;
 
     public Gui() {
         super("Skin Consultation Centre");
+        ImageIcon icon = new ImageIcon("assets/images/img1.jpg");
         JPanel mainTestPanel = new JPanel();
+        setIconImage(icon.getImage());
         BorderLayout layout = new BorderLayout();
         layout.setVgap(0);
         layout.setHgap(0);
@@ -471,7 +474,7 @@ public class Gui extends JFrame {
 
             if (showOpenDialogue == JFileChooser.APPROVE_OPTION) {
                 File selectedImageFile = browseImageFile.getSelectedFile();
-                String selectedImagePath = selectedImageFile.getAbsolutePath();
+                selectedImagePath = selectedImageFile.getAbsolutePath();
                 JOptionPane.showMessageDialog(null, selectedImagePath);
                 //Display image on JLabel
                 ImageIcon ii = new ImageIcon(selectedImagePath);
@@ -543,12 +546,12 @@ public class Gui extends JFrame {
                         txtCost.setText(String.valueOf(consultationCost));
                         double txtCostValue = Double.parseDouble(txtCost.getText());
                         String txtNotesValue = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
-//                        LocalDate timeSlot = LocalDate.parse((CharSequence) jComboBox.getSelectedItem());
+                        String fullNote = txtNotesValue + "  Uploaded Image Path: " + selectedImagePath;
                         DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                         String time = (String) jComboBox.getSelectedItem();
                         LocalDateTime timeSlot = LocalDateTime.parse(time, localDateFormatter);
 
-                                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, timeSlot, txtCostValue, txtNotesValue);
+                        Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, timeSlot, txtCostValue, fullNote);
                         consultations.add(consultation);
 
                         String message = saveConsultation();
@@ -744,10 +747,10 @@ public class Gui extends JFrame {
                 String[] arr = data.split(",");
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
-                LocalDateTime date = LocalDateTime.parse(arr[2]);
-                byte[] decodedBytes = Base64.getDecoder().decode(arr[4]);
-                String decodedString = new String(decodedBytes);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), decodedString);
+                LocalDateTime date = LocalDateTime.parse(String.valueOf(arr[2]));
+                //byte[] decodedBytes = Base64.getDecoder().decode(arr[4]);
+                //String decodedString = new String(decodedBytes);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), arr[4]);
                 consultations.add(initConsultation);
             }
             myReader.close();

@@ -42,12 +42,4 @@ public class Doctor extends Person {
         return getName() + "," + getSurname() + "," + getDob() + ","
                 + getMobileNo() + "," + getMedicalLicenceNo() + "," + getSpecialization() + "\n";
     }
-
-    /*public String identity() {
-        String[] names = namesList.toArray(new String[0]);
-        return names;
-    }*/
-
-    //    {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"}
-
 }

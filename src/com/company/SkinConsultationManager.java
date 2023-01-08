@@ -7,7 +7,7 @@ public interface SkinConsultationManager {
 
     Doctor printList();
 
-    Doctor saveFile();
+    void saveFile();
 
     void viewGui();
 }

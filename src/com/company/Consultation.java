@@ -74,9 +74,12 @@ public class Consultation {
                 patient.getSurname() + "," +
                 patient.getDob() + "," +
                 patient.getMobileNo() + "," +
-//                time + ",£" +
                 time + "," +
-                cost + "," +
+                cost + ",£" +
                 notes + "\n";
     }
+
+/*    public static void main(String[] args) {
+        LocalDateTime.parse("2023-01-17T05:45:04");
+    }*/
 }

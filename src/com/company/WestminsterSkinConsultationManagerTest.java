@@ -30,12 +30,11 @@ class WestminsterSkinConsultationManagerTest {
 
     @Test
     void deleteDoctor() {
-        String input = "44";
+        String input = "44\n";
         InputStream inputStream = new ByteArrayInputStream(input.getBytes());
         WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(inputStream);
         Doctor doctor = manager.deleteDoctor();
-        assertEquals(44,
-                doctor.getMedicalLicenceNo());
+        assertEquals(44, doctor.getMedicalLicenceNo());
     }
 
     @Test
@@ -43,7 +42,7 @@ class WestminsterSkinConsultationManagerTest {
         String input = "";
         InputStream inputStream = new ByteArrayInputStream(input.getBytes());
         WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(inputStream);
-        Doctor doctor = manager.printList();
+        manager.printList();
     }
 
     @Test
@@ -51,7 +50,7 @@ class WestminsterSkinConsultationManagerTest {
         String input = "";
         InputStream inputStream = new ByteArrayInputStream(input.getBytes());
         WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(inputStream);
-        Doctor doctor = manager.saveFile();
+        manager.saveFile();
     }
 
     @Test

@@ -44,6 +44,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
 
     @Override
     public Doctor deleteDoctor() {
+        Doctor deletedDoctor = null;
         int medicalLicenceNumber = getIntInput("Enter doctor medical licence number");
         checkNo(medicalLicenceNumber);
         try {
@@ -53,6 +54,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
                     doctorList.remove(doctor);
                     deletedList.add(doctor);
                     isDeleted = true;
+                    deletedDoctor = doctor;
                     break;
                 }
             }
@@ -63,7 +65,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Invalid doctor medical licence number!!!\n");
         }
-        return null;
+        return deletedDoctor;
     }
 
     @Override
@@ -84,7 +86,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     }
 
     @Override
-    public Doctor saveFile() {
+    public void saveFile() {
         try {
             Formatter formatter = new Formatter("assets/files/doctorsList.txt");
             if (doctorList.size() > 0) {
@@ -99,7 +101,6 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Could not store the data!!!\n");
         }
-        return null;
     }
 
     @Override
