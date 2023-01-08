@@ -2,7 +2,6 @@ package com.company;
 
 import java.io.File;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Formatter;
@@ -12,7 +11,6 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     static Scanner scan = new Scanner(System.in);
     ArrayList<Doctor> doctorList = new ArrayList<>();
     ArrayList<Doctor> deletedList = new ArrayList<>();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public WestminsterSkinConsultationManager(InputStream source) {
         scan = new Scanner(source);
@@ -45,7 +43,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     }
 
     @Override
-    public void deleteDoctor() {
+    public Doctor deleteDoctor() {
         int medicalLicenceNumber = getIntInput("Enter doctor medical licence number");
         checkNo(medicalLicenceNumber);
         try {
@@ -65,10 +63,11 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Invalid doctor medical licence number!!!\n");
         }
+        return null;
     }
 
     @Override
-    public void printList() {
+    public Doctor printList() {
         try {
             if (doctorList.size() > 0) {
                 doctorList.sort(Comparator.comparing(d -> d.getSurname().toLowerCase()));
@@ -81,10 +80,11 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Could not find doctors list!!!\n");
         }
+        return null;
     }
 
     @Override
-    public void saveFile() {
+    public Doctor saveFile() {
         try {
             Formatter formatter = new Formatter("assets/files/doctorsList.txt");
             if (doctorList.size() > 0) {
@@ -99,6 +99,7 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         } catch (Exception exception) {
             System.out.println("Could not store the data!!!\n");
         }
+        return null;
     }
 
     @Override
@@ -159,26 +160,6 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         System.out.println("*** " + message + " : ");
         return scan.next().toLowerCase();
     }
-
-/*
-    private String getDateInput() {
-        String date = new Date();
-        boolean isDate;
-        do {
-            System.out.println("*** " + "Enter the Date Of Birth" + " : ");
-            String dob = scan.next();
-            try {
-                date = dateFormat.parse(dob);
-                isDate = true;
-            } catch (ParseException e) {
-                System.out.println(dob + " is Invalid Date format!!! (hint:YYYY/MM/DD, DD/MM/YYYY)");
-                isDate = false;
-            }
-        } while (!(isDate));
-
-        return date;
-    }
-*/
 
     private Integer getIntInput(String message) {
         int input = 0;

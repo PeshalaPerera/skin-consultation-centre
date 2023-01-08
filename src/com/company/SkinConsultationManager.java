@@ -3,11 +3,11 @@ package com.company;
 public interface SkinConsultationManager {
     Doctor addDoctor();
 
-    void deleteDoctor();
+    Doctor deleteDoctor();
 
-    void printList();
+    Doctor printList();
 
-    void saveFile();
+    Doctor saveFile();
 
     void viewGui();
 }

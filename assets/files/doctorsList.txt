@@ -1,8 +1,8 @@
-AAA,AA,AA,44,44,44
+AAA,AA,44,AA,44,44
 F,F,G,G,4,D
 sam,miller,111,111,111,aa
 deen,miller,222,222,222,bb
 lilith,miller,333,333,333,ss
-sam,miller,0718138414,200/10/11,8888,sss
+sam,miller,200/10/11,0718138414,8888,sss
 guwen,paris,555,555,555,ss
-ss,x,14896,145896,14896,4896
+ss,x,145896,14896,14896,4896

@@ -30,14 +30,28 @@ class WestminsterSkinConsultationManagerTest {
 
     @Test
     void deleteDoctor() {
+        String input = "44";
+        InputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(inputStream);
+        Doctor doctor = manager.deleteDoctor();
+        assertEquals(44,
+                doctor.getMedicalLicenceNo());
     }
 
     @Test
     void printList() {
+        String input = "";
+        InputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(inputStream);
+        Doctor doctor = manager.printList();
     }
 
     @Test
     void saveFile() {
+        String input = "";
+        InputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        WestminsterSkinConsultationManager manager = new WestminsterSkinConsultationManager(inputStream);
+        Doctor doctor = manager.saveFile();
     }
 
     @Test
