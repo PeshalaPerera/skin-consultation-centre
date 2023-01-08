@@ -538,7 +538,7 @@ public class Gui extends JFrame {
                         Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
                         Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
                         txtCost.setText(String.valueOf(consultationCost));
-                        String txtNotesValues = txtNotes.getText();
+                        String txtNotesValues = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
                         double txtCostValue = Double.parseDouble(txtCost.getText());
                         String textNote = "";
                         if (selectedImagePath != null) {
@@ -549,12 +549,12 @@ public class Gui extends JFrame {
                         } else {
                             textNote = txtNotesValues;
                         }
-                        String fullNote = Base64.getEncoder().encodeToString(textNote.getBytes());
+
                         DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                         String time = (String) jComboBox.getSelectedItem();
                         LocalDateTime timeSlot = LocalDateTime.parse(time, localDateFormatter);
 
-                        Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, timeSlot, txtCostValue, fullNote);
+                        Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, timeSlot, txtCostValue, textNote);
                         consultations.add(consultation);
 
                         String message = saveConsultation();
@@ -751,10 +751,7 @@ public class Gui extends JFrame {
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
                 LocalDateTime date = LocalDateTime.parse(String.valueOf(arr[2]));
-                String encodedString = String.valueOf(arr[4]);
-                byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-                String decodedString = new String(decodedBytes);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), decodedString);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), arr[4]);
                 consultations.add(initConsultation);
             }
             myReader.close();
