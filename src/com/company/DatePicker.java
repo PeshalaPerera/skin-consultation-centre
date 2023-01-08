@@ -2,8 +2,11 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+/**
+ * @author peshala
+ * @version (DatePicker)
+ */
 
 public class DatePicker {
     int month = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
@@ -17,7 +20,7 @@ public class DatePicker {
     public DatePicker(JFrame parent) {
         d = new JDialog();
         d.setModal(true);
-        String[] header = { "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat" };
+        String[] header = {"Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"};
         JPanel p1 = new JPanel(new GridLayout(7, 7));
         p1.setPreferredSize(new Dimension(430, 120));
         for (int x = 0; x < button.length; x++) {
@@ -26,12 +29,9 @@ public class DatePicker {
             button[x].setFocusPainted(false);
             button[x].setBackground(Color.white);
             if (x > 6) {
-                button[x].addActionListener(new ActionListener() {
-
-                    public void actionPerformed(ActionEvent ae) {
-                        day = button[selection].getActionCommand();
-                        d.dispose();
-                    }
+                button[x].addActionListener(ae -> {
+                    day = button[selection].getActionCommand();
+                    d.dispose();
                 });
             }
             if (x < 7) {
@@ -42,22 +42,16 @@ public class DatePicker {
         }
         JPanel p2 = new JPanel(new GridLayout(1, 3));
         JButton previous = new JButton("<< Previous");
-        previous.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                month--;
-                displayDate();
-            }
+        previous.addActionListener(ae -> {
+            month--;
+            displayDate();
         });
         p2.add(previous);
         p2.add(l);
         JButton next = new JButton("Next >>");
-        next.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                month++;
-                displayDate();
-            }
+        next.addActionListener(ae -> {
+            month++;
+            displayDate();
         });
         p2.add(next);
         d.add(p1, BorderLayout.CENTER);

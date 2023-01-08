@@ -1,5 +1,10 @@
 package com.company;
 
+/**
+ * @author peshala
+ * @version (Person)
+ */
+
 public class Person {
     private String name;
     private String surname;

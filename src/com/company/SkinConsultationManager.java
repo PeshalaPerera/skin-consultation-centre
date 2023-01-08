@@ -1,5 +1,10 @@
 package com.company;
 
+/**
+ * @author peshala
+ * @version (SkinConsultationManager)
+ */
+
 public interface SkinConsultationManager {
     Doctor addDoctor();
 

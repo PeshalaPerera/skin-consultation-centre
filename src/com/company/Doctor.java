@@ -1,5 +1,10 @@
 package com.company;
 
+/**
+ * @author peshala
+ * @version (Person)
+ */
+
 public class Doctor extends Person {
     private int medicalLicenceNo;
     private String specialization;

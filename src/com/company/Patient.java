@@ -1,5 +1,10 @@
 package com.company;
 
+/**
+ * @author peshala
+ * @version (Patient)
+ */
+
 public class Patient extends Person {
     private int id;
 

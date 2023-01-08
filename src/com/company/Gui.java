@@ -14,6 +14,11 @@ import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
+/**
+ * @author peshala
+ * @version (Gui)
+ */
+
 public class Gui extends JFrame {
     JPanel mainPanel = new JPanel();
     JPanel welcomePanel = new JPanel();
@@ -424,7 +429,7 @@ public class Gui extends JFrame {
 
         JLabel lblTime = label("Select Time");
         JComboBox jComboBox = new JComboBox();
-        cbDoctorNames.addActionListener (e -> {
+        cbDoctorNames.addActionListener(e -> {
             jComboBox.removeAllItems();
             String cbDoctorVal = (String) cbDoctorNames.getSelectedItem();
             ArrayList<String[]> dateTimeDropdown = getAvailableTimesContent(cbDoctorVal);
@@ -533,7 +538,7 @@ public class Gui extends JFrame {
 
                     Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
                     patientList.add(patient);
-                    if(savePatients()) {
+                    if (savePatients()) {
                         String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
                         Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
                         Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
@@ -894,6 +899,7 @@ public class Gui extends JFrame {
             }
             formatter.close();
         } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -909,24 +915,13 @@ public class Gui extends JFrame {
             formatter.close();
             status = true;
         } catch (Exception exception) {
+            exception.printStackTrace();
         }
         return status;
     }
 
     private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
         return doctorList.stream().map(doctor -> doctor.getName()).toArray(String[]::new);
-    }
-
-    private void availableTimesDropdown(String name) {
-        JComboBox box = new JComboBox();
-        ArrayList<String[]> dateTime = getSavedConsultationsContent();
-        ArrayList<String[]> dateTimeDropdown = getSavedConsultationsContent();
-        for (String[] date : dateTimeDropdown) {
-            if (Objects.equals(date, name)) {
-                box.addItem(date[1]);
-            }
-        }
-
     }
 
     private JLabel mainHeading(String message) {

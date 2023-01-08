@@ -13,6 +13,11 @@ import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
+/**
+ * @author peshala
+ * @version (SkinConsultationCentre)
+ */
+
 public class SkinConsultationCentre extends JFrame {
     JPanel mainPanel = new JPanel();
     ArrayList<Patient> patientList = new ArrayList<>();
@@ -360,13 +365,13 @@ public class SkinConsultationCentre extends JFrame {
 
         initDoctor();
         JLabel lblDoctorName1 = label("Doctor Name");
-        String[] doctorNamesList1 = { "Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6" };
+        String[] doctorNamesList1 = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
         JComboBox<String> cbDoctorNames1 = new JComboBox<>(doctorDropdown(doctorList));
         firstPanel.add(lblDoctorName1);
         firstPanel.add(cbDoctorNames1);
 
         JLabel test3 = label("Available Times");
-        String[] test = { "Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6" };
+        String[] test = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
         JComboBox test2 = new JComboBox(test);
         firstPanel.add(test3);
         firstPanel.add(test2);
@@ -395,7 +400,7 @@ public class SkinConsultationCentre extends JFrame {
         bottomPanel.add(lblBottom);
 
         JLabel lblDoctor = label("Doctor Name");
-        String[] doctors = { "Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6" };
+        String[] doctors = {"Doctor4", "Doctor2", "Doctor3", "Doctor4", "Doctor5", "Doctor6"};
         JComboBox cbDoctor = new JComboBox(doctors);
         thirdPanel.add(lblDoctor);
         thirdPanel.add(cbDoctor);
@@ -621,8 +626,8 @@ public class SkinConsultationCentre extends JFrame {
         ArrayList<String[]> savedConsultations = getFileContent("consultations.txt");
         //String[][] data = savedConsultations.toArray(String[][]::new);
         String[][] data = {
-                { "Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes" },
-                { "Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes" },
+                {"Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes"},
+                {"Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes"},
         };
         String[] column = {
                 "Consultation Id", "Doctor", "Patient Name", "Patient Surname", "Patient Mobile Number", "Patient DOB", "Patient Id", "Date/Time", "Cost", "Notes"

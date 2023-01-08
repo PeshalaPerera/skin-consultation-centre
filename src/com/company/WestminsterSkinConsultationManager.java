@@ -7,6 +7,11 @@ import java.util.Comparator;
 import java.util.Formatter;
 import java.util.Scanner;
 
+/**
+ * @author peshala
+ * @version (WestminsterSkinConsultationManager)
+ */
+
 public class WestminsterSkinConsultationManager implements SkinConsultationManager {
     static Scanner scan = new Scanner(System.in);
     ArrayList<Doctor> doctorList = new ArrayList<>();

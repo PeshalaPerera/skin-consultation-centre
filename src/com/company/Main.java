@@ -2,6 +2,11 @@ package com.company;
 
 import java.util.Scanner;
 
+/**
+ * @author peshala
+ * @version (Main)
+ */
+
 public class Main {
 
     public static void main(String[] args) {

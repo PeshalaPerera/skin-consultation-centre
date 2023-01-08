@@ -3,6 +3,11 @@ package com.company;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * @author peshala
+ * @version (Consultation)
+ */
+
 public class Consultation {
     private Doctor doctor;
     private Patient patient;
@@ -78,8 +83,4 @@ public class Consultation {
                 cost + "," +
                 notes + "\n";
     }
-
-/*    public static void main(String[] args) {
-        LocalDateTime.parse("2023-01-17T05:45:04");
-    }*/
 }

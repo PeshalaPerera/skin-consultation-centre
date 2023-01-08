@@ -7,6 +7,11 @@ import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author peshala
+ * @version (WestminsterSkinConsultationManagerTest)
+ */
+
 class WestminsterSkinConsultationManagerTest {
 
     @Test
