@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,7 +14,8 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
     ArrayList<Doctor> deletedList = new ArrayList<>();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public WestminsterSkinConsultationManager() {
+    public WestminsterSkinConsultationManager(InputStream source) {
+        scan = new Scanner(source);
         initialise();
     }
 
