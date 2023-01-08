@@ -3,6 +3,7 @@ package com.company;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,7 +55,7 @@ public class Gui extends JFrame {
     public static void start() {
         Gui gui = new Gui();
         gui.setVisible(true);
-        gui.setSize(1100, 700);
+        gui.setSize(1300, 700);
         gui.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
@@ -175,7 +176,7 @@ public class Gui extends JFrame {
             JFrame frame = new JFrame();
             frame.setTitle("Saved Consultations");
             frame.add(savedConsultations());
-            frame.setSize(500, 600);
+            frame.setSize(1300, 600);
             frame.setVisible(true);
         });
 
@@ -205,10 +206,10 @@ public class Gui extends JFrame {
         JLabel mainHeading = mainHeading("Saved Consultations");
         headerPanel.add(mainHeading);
 
-        ArrayList<String[]> doctorList = getDoctorFileContent();
-        String[][] data = doctorList.toArray(String[][]::new);
+        ArrayList<String[]> consultationsList = getSavedConsultationsContent();
+        String[][] data = consultationsList.toArray(String[][]::new);
         String[] column = {
-                "Name", "Surname", "DOB", "MobileNumber", "Medical Licence Number", "Specialization"
+                "Medical License Number", "NIC", "Patient Name", "Patient Surname", "DOB", "Mobile Number", "Time", "Cost", "Notes"
         };
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
@@ -223,7 +224,17 @@ public class Gui extends JFrame {
         table.setAutoCreateRowSorter(true);
         table.setBackground(new Color(202, 240, 248));
         table.setShowVerticalLines(true);
-        table.setPreferredScrollableViewportSize(new Dimension(400, 400));
+        table.setPreferredScrollableViewportSize(new Dimension(1200, 400));
+        TableColumnModel columnModel = table.getColumnModel();
+        columnModel.getColumn(0).setMinWidth(200);
+        columnModel.getColumn(1).setMinWidth(100);
+        columnModel.getColumn(2).setMinWidth(150);
+        columnModel.getColumn(3).setMinWidth(150);
+        columnModel.getColumn(4).setMinWidth(100);
+        columnModel.getColumn(5).setMinWidth(150);
+        columnModel.getColumn(6).setMinWidth(100);
+        columnModel.getColumn(7).setMinWidth(100);
+        columnModel.getColumn(8).setMinWidth(150);
 
         JScrollPane sp = new JScrollPane(table);
         topPanel.add(sp);
@@ -259,6 +270,14 @@ public class Gui extends JFrame {
         table.setAutoCreateRowSorter(true);
         table.setBackground(new Color(202, 240, 248));
         table.setShowVerticalLines(true);
+        table.setPreferredScrollableViewportSize(new Dimension(700, 700));
+        TableColumnModel columnModel = table.getColumnModel();
+        columnModel.getColumn(0).setMinWidth(100);
+        columnModel.getColumn(1).setMinWidth(100);
+        columnModel.getColumn(2).setMinWidth(80);
+        columnModel.getColumn(3).setPreferredWidth(120);
+        columnModel.getColumn(4).setPreferredWidth(150);
+        columnModel.getColumn(5).setPreferredWidth(150);
         return table;
     }
 
@@ -280,6 +299,26 @@ public class Gui extends JFrame {
         }
         myReader.close();
         return doctorList;
+    }
+
+    private ArrayList<String[]> getSavedConsultationsContent() {
+        File myObj = new File("assets/files/consultations.txt");
+        ArrayList<String[]> savedConsultationsList = new ArrayList<>();
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(myObj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            assert myReader != null;
+            if (!myReader.hasNextLine()) break;
+            String data = myReader.nextLine();
+            String[] arr = data.split(",");
+            savedConsultationsList.add(arr);
+        }
+        myReader.close();
+        return savedConsultationsList;
     }
 
     private ArrayList<String[]> getTimesFileContent() {
@@ -370,9 +409,6 @@ public class Gui extends JFrame {
         topPanel.add(lblNotes);
         topPanel.add(txtNotes);
 
-//        String originalInput = "test input";
-        String encodedString = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
-
         JLabel images = label("Images");
         JLabel jLabelImage = new JLabel();
         topPanel.add(images);
@@ -443,6 +479,7 @@ public class Gui extends JFrame {
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                     String status = initConsultations();
                     if (status.equals("error")) {
+                        System.out.println(consultations);
                         lblMessage.setText("Could not load the data!!!");
                     }
 
@@ -457,21 +494,27 @@ public class Gui extends JFrame {
                     int txtPatientNICValue = parseInt(txtPatientNIC.getText());
 
                     Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
+                    patientList.add(patient);                    ;
+                    if(savePatients()) {
+                        String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
+                        Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
+                        Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
+                        txtCost.setText(String.valueOf(consultationCost));
+                        double txtCostValue = Double.parseDouble(txtCost.getText());
+                        String txtNotesValue = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
 
-                    String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
-                    Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
-                    Double consultationCost = costCalculator(txtConsultationHoursValue, txtPatientNameValue);
-                    txtCost.setText(String.valueOf(consultationCost));
-                    double txtCostValue = Double.parseDouble(txtCost.getText());
 
-                    Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, encodedString);
-                    consultations.add(consultation);
-                    patientList.add(patient);
+                        Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
+                        consultations.add(consultation);
 
-                    String message = saveConsultation();
-                    if (message.equals("success")) {
-                        showMessageDialog("Consultation Added Successfully...");
-                        btnReset.doClick();
+                        String message = saveConsultation();
+                        if (message.equals("success")) {
+                            showMessageDialog("Consultation Added Successfully...", addConsultationPanel);
+                            btnReset.doClick();
+                        } else {
+                            System.out.println("If message is not success");
+                            showErrorMessageDialog(addConsultationPanel);
+                        }
                     } else {
                         showErrorMessageDialog(addConsultationPanel);
                     }
@@ -538,12 +581,8 @@ public class Gui extends JFrame {
         dateFromPanel.add(lblDoctorAvailableTimeFrom);
         dateFromPanel.add(btnFromDate);
 
-        //dateFromPanel.setLayout();
-
         dateToPanel.add(lblDoctorAvailableTimeTo);
         dateToPanel.add(btnToDate);
-
-        //dateToPanel.setLayout();
 
         topPanel.add(dateFromPanel);
         topPanel.add(dateToPanel);
@@ -577,6 +616,10 @@ public class Gui extends JFrame {
         table.setShowVerticalLines(true);
         table.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
+        TableColumnModel columnModel = table.getColumnModel();
+        columnModel.getColumn(0).setMinWidth(200);
+        columnModel.getColumn(1).setMinWidth(100);
+        columnModel.getColumn(2).setMinWidth(100);
 
         JScrollPane sp = new JScrollPane(table);
         JPanel doctorAvailabilityTimes = new JPanel();
@@ -620,7 +663,7 @@ public class Gui extends JFrame {
                         }
 
                         if (message.equals("success")) {
-                            showMessageDialog("Updated Successfully...");
+                            showMessageDialog("Updated Successfully...", doctorAvailabilityJPanel);
                             btnReset.doClick();
                         } else {
                             showErrorMessageDialog(doctorAvailabilityJPanel);
@@ -657,7 +700,9 @@ public class Gui extends JFrame {
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
                 LocalDate date = LocalDate.parse(arr[2]);
-                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), arr[4]);
+                byte[] decodedBytes = Base64.getDecoder().decode(arr[4]);
+                String decodedString = new String(decodedBytes);
+                Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), decodedString);
                 consultations.add(initConsultation);
             }
             myReader.close();
@@ -775,7 +820,6 @@ public class Gui extends JFrame {
     private String saveConsultation() {
         String message;
         try {
-            System.out.println(consultations);
             Formatter formatter = new Formatter("assets/files/consultations.txt");
             if (consultations.size() > 0) {
                 for (Consultation consultation : consultations) {
@@ -788,6 +832,22 @@ public class Gui extends JFrame {
             message = "error";
         }
         return message;
+    }
+
+    private boolean savePatients() {
+        boolean status = false;
+        try {
+            Formatter formatter = new Formatter("assets/files/patientslist.txt");
+            if (patientList.size() > 0) {
+                for (Patient patient : patientList) {
+                    formatter.format("%s", patient.toFormattedString());
+                }
+            }
+            formatter.close();
+            status = true;
+        } catch (Exception exception) {
+        }
+        return status;
     }
 
     private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
@@ -857,7 +917,7 @@ public class Gui extends JFrame {
         return btn;
     }
 
-    private void showMessageDialog(String message) {
+    private void showMessageDialog(String message, JPanel panel) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText(message);
         lblMessage.setForeground(new Color(3, 4, 94, 255));

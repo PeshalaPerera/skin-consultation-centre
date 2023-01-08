@@ -61,6 +61,10 @@ public class Consultation {
     public String toString() {
         return doctor.getMedicalLicenceNo() + "," +
                 patient.getId() + "," +
+                patient.getName() + "," +
+                patient.getSurname() + "," +
+                patient.getDob() + "," +
+                patient.getMobileNo() + "," +
                 time + "," +
                 cost + "," +
                 notes + "\n";
