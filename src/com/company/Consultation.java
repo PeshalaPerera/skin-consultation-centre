@@ -1,15 +1,16 @@
 package com.company;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Consultation {
     private Doctor doctor;
     private Patient patient;
-    private LocalDate time;
+    private LocalDateTime time;
     private double cost;
     private String notes;
 
-    public Consultation(Doctor doctor, Patient patient, LocalDate time, double cost, String notes) {
+    public Consultation(Doctor doctor, Patient patient, LocalDateTime time, double cost, String notes) {
         this.doctor = doctor;
         this.patient = patient;
         this.time = time;
@@ -37,7 +38,7 @@ public class Consultation {
         return LocalDate.from(time);
     }
 
-    public void setTime(LocalDate time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 

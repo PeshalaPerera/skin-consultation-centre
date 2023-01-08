@@ -5,14 +5,15 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -321,6 +322,31 @@ public class Gui extends JFrame {
         return savedConsultationsList;
     }
 
+    private ArrayList<String[]> getAvailableTimesContent(String name) {
+        System.out.println(name);
+        File myObj = new File("assets/files/doctorAvailableTimes.txt");
+        ArrayList<String[]> availableTimesList = new ArrayList<>();
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(myObj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            assert myReader != null;
+            if (!myReader.hasNextLine()) break;
+            String data = myReader.nextLine();
+            String[] arr = data.split(",");
+            if (arr[2].equals("Vacant")) {
+                if (arr[0].equals(name)) {
+                    availableTimesList.add(arr);
+                }
+            }
+        }
+        myReader.close();
+        return availableTimesList;
+    }
+
     private ArrayList<String[]> getTimesFileContent() {
         File myObj = new File("assets/files/doctorAvailableTimes.txt");
         ArrayList<String[]> timesList = new ArrayList<>();
@@ -397,6 +423,22 @@ public class Gui extends JFrame {
         topPanel.add(lblDoctorName);
         topPanel.add(cbDoctorNames);
 
+        JLabel lblTime = label("Select Time");
+        JComboBox jComboBox = new JComboBox();
+        cbDoctorNames.addActionListener (new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jComboBox.removeAllItems();
+                String cbDoctorVal = (String) cbDoctorNames.getSelectedItem();
+                ArrayList<String[]> dateTimeDropdown = getAvailableTimesContent(cbDoctorVal);
+                for (String[] date : dateTimeDropdown) {
+                    jComboBox.addItem(date[1]);
+                }
+            }
+        });
+
+        topPanel.add(lblTime);
+        topPanel.add(jComboBox);
+
         JLabel lblConsultationHours = label("Consultation Hours");
         JTextField txtConsultationHours = textField();
         topPanel.add(lblConsultationHours);
@@ -443,7 +485,7 @@ public class Gui extends JFrame {
         JLabel lblMessage = new JLabel();
         topPanel.add(lblMessage);
 
-        GridLayout formLayout = new GridLayout(10, 2);
+        GridLayout formLayout = new GridLayout(11, 2);
         formLayout.setHgap(5);
         formLayout.setVgap(5);
 
@@ -501,9 +543,12 @@ public class Gui extends JFrame {
                         txtCost.setText(String.valueOf(consultationCost));
                         double txtCostValue = Double.parseDouble(txtCost.getText());
                         String txtNotesValue = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
-//                        LocalDate timeSlot = LocalDate.now();
+//                        LocalDate timeSlot = LocalDate.parse((CharSequence) jComboBox.getSelectedItem());
+                        DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                        String time = (String) jComboBox.getSelectedItem();
+                        LocalDateTime timeSlot = LocalDateTime.parse(time, localDateFormatter);
 
-                        Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
+                                Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, timeSlot, txtCostValue, txtNotesValue);
                         consultations.add(consultation);
 
                         String message = saveConsultation();
@@ -590,7 +635,7 @@ public class Gui extends JFrame {
         ArrayList<String[]> timesList = getTimesFileContent();
 
         String[][] data = timesList.toArray(String[][]::new);
-        String[] column = {"Medical Licence Number", "Date From", "Status"};
+        String[] column = {"Doctor Name", "Date From", "Status"};
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
         table.getTableHeader().setOpaque(false);
@@ -607,7 +652,7 @@ public class Gui extends JFrame {
         table.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
         TableColumnModel columnModel = table.getColumnModel();
-        columnModel.getColumn(0).setMinWidth(200);
+        columnModel.getColumn(0).setMinWidth(150);
         columnModel.getColumn(1).setMinWidth(100);
         columnModel.getColumn(2).setMinWidth(100);
 
@@ -699,7 +744,7 @@ public class Gui extends JFrame {
                 String[] arr = data.split(",");
                 int medicalLicenseNumber = Integer.parseInt(arr[0]);
                 int patientId = Integer.parseInt(arr[1]);
-                LocalDate date = LocalDate.parse(arr[2]);
+                LocalDateTime date = LocalDateTime.parse(arr[2]);
                 byte[] decodedBytes = Base64.getDecoder().decode(arr[4]);
                 String decodedString = new String(decodedBytes);
                 Consultation initConsultation = new Consultation(getDoctorByMedicalLicenceNo(medicalLicenseNumber, doctorList), getPatientById(patientId, patientList), date, Double.parseDouble(arr[3]), decodedString);
@@ -866,6 +911,18 @@ public class Gui extends JFrame {
 
     private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
         return doctorList.stream().map(doctor -> doctor.getName()).toArray(String[]::new);
+    }
+
+    private void availableTimesDropdown(String name) {
+        JComboBox box = new JComboBox();
+        ArrayList<String[]> dateTime = getSavedConsultationsContent();
+        ArrayList<String[]> dateTimeDropdown = getSavedConsultationsContent();
+        for (String[] date : dateTimeDropdown) {
+            if (Objects.equals(date, name)) {
+                box.addItem(date[1]);
+            }
+        }
+
     }
 
     private JLabel mainHeading(String message) {
