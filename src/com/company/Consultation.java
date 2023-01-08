@@ -61,17 +61,21 @@ public class Consultation {
     public String toString() {
         return doctor.getMedicalLicenceNo() + "," +
                 patient.getId() + "," +
-                patient.getName() + "," +
-                patient.getSurname() + "," +
-                patient.getDob() + "," +
-                patient.getMobileNo() + "," +
                 time + "," +
                 cost + "," +
                 notes + "\n";
     }
 
     public String toFormattedString() {
-        return getDoctor() + "," + getPatient() + "," + getTime() + ","
-                + getCost() + "," + getNotes() + "\n";
+        return doctor.getMedicalLicenceNo() + "," +
+                patient.getId() + "," +
+                patient.getName() + "," +
+                patient.getSurname() + "," +
+                patient.getDob() + "," +
+                patient.getMobileNo() + "," +
+//                time + ",£" +
+                time + "," +
+                cost + "," +
+                notes + "\n";
     }
 }

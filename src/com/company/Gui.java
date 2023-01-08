@@ -230,10 +230,10 @@ public class Gui extends JFrame {
         columnModel.getColumn(1).setMinWidth(100);
         columnModel.getColumn(2).setMinWidth(150);
         columnModel.getColumn(3).setMinWidth(150);
-        columnModel.getColumn(4).setMinWidth(100);
-        columnModel.getColumn(5).setMinWidth(150);
-        columnModel.getColumn(6).setMinWidth(100);
-        columnModel.getColumn(7).setMinWidth(100);
+        columnModel.getColumn(4).setPreferredWidth(120);
+        columnModel.getColumn(5).setPreferredWidth(150);
+        columnModel.getColumn(6).setPreferredWidth(100);
+        columnModel.getColumn(7).setMinWidth(80);
         columnModel.getColumn(8).setMinWidth(150);
 
         JScrollPane sp = new JScrollPane(table);
@@ -302,7 +302,7 @@ public class Gui extends JFrame {
     }
 
     private ArrayList<String[]> getSavedConsultationsContent() {
-        File myObj = new File("assets/files/consultations.txt");
+        File myObj = new File("assets/files/savedConsultations.txt");
         ArrayList<String[]> savedConsultationsList = new ArrayList<>();
         Scanner myReader = null;
         try {
@@ -479,7 +479,6 @@ public class Gui extends JFrame {
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                     String status = initConsultations();
                     if (status.equals("error")) {
-                        System.out.println(consultations);
                         lblMessage.setText("Could not load the data!!!");
                     }
 
@@ -494,7 +493,7 @@ public class Gui extends JFrame {
                     int txtPatientNICValue = parseInt(txtPatientNIC.getText());
 
                     Patient patient = new Patient(txtPatientNameValue, txtPatientSurnameValue, txtPatientMobileNoValue, txtPatientDOBValue, txtPatientNICValue);
-                    patientList.add(patient);                    ;
+                    patientList.add(patient);
                     if(savePatients()) {
                         String txtDoctorNameValue = (String) cbDoctorNames.getSelectedItem();
                         Integer txtConsultationHoursValue = Integer.parseInt(txtConsultationHours.getText());
@@ -502,7 +501,7 @@ public class Gui extends JFrame {
                         txtCost.setText(String.valueOf(consultationCost));
                         double txtCostValue = Double.parseDouble(txtCost.getText());
                         String txtNotesValue = Base64.getEncoder().encodeToString(txtNotes.getText().getBytes());
-
+//                        LocalDate timeSlot = LocalDate.now();
 
                         Consultation consultation = new Consultation(getDoctorByName(txtDoctorNameValue, doctorList), patient, LocalDate.now(), txtCostValue, txtNotesValue);
                         consultations.add(consultation);
@@ -572,17 +571,13 @@ public class Gui extends JFrame {
         topPanel.add(cbDoctorNames);
 
         JLabel lblDoctorAvailableTimeFrom = new JLabel();
-        JLabel lblDoctorAvailableTimeTo = new JLabel();
         JButton btnFromDate = dateButton("Date From");
-        JButton btnToDate = dateButton("Date To");
+        JLabel timeStatus = new JLabel("Vacant");
         JPanel dateFromPanel = new JPanel();
         JPanel dateToPanel = new JPanel();
 
         dateFromPanel.add(lblDoctorAvailableTimeFrom);
         dateFromPanel.add(btnFromDate);
-
-        dateToPanel.add(lblDoctorAvailableTimeTo);
-        dateToPanel.add(btnToDate);
 
         topPanel.add(dateFromPanel);
         topPanel.add(dateToPanel);
@@ -592,15 +587,10 @@ public class Gui extends JFrame {
             lblDoctorAvailableTimeFrom.setText(datePicker.setPickedDate());
         });
 
-        btnToDate.addActionListener(e -> {
-            DatePicker datePicker = new DatePicker(this);
-            lblDoctorAvailableTimeTo.setText(datePicker.setPickedDate());
-        });
-
         ArrayList<String[]> timesList = getTimesFileContent();
 
         String[][] data = timesList.toArray(String[][]::new);
-        String[] column = {"Medical Licence Number", "Date From", "Date To"};
+        String[] column = {"Medical Licence Number", "Date From", "Status"};
         JTable table = new JTable(data, column);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 17));
         table.getTableHeader().setOpaque(false);
@@ -630,6 +620,17 @@ public class Gui extends JFrame {
 
         JButton btnReset = button("Reset");
         JButton btnUpdate = button("Update");
+
+        JButton refresh = button("Refresh");
+        refresh.addActionListener(e -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(doctorAvailabilityJPanel);
+            frame.dispose();
+            dispose();
+            start();
+        });
+
+        bottomPanel.add(refresh);
+
         bottomPanel.add(btnReset);
         bottomPanel.add(btnUpdate);
 
@@ -644,7 +645,7 @@ public class Gui extends JFrame {
 
         btnUpdate.addActionListener(ae -> {
             if ((lblDoctorAvailableTimeFrom.getText().trim().length() > 0) &&
-                    (lblDoctorAvailableTimeTo.getText().trim().length() > 0)) {
+                    (timeStatus.getText().trim().length() > 0)) {
                 if (JOptionPane.showConfirmDialog(doctorAvailabilityJPanel,
                         "Are you sure?", "Select an Option?",
                         JOptionPane.YES_NO_OPTION,
@@ -655,7 +656,7 @@ public class Gui extends JFrame {
                         try {
                             FileWriter fileWriter = new FileWriter("assets/files/doctorAvailableTimes.txt", true);
                             Formatter formatter = new Formatter(fileWriter);
-                            formatter.format("%s\n", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + lblDoctorAvailableTimeTo.getText());
+                            formatter.format("%s\n", cbDoctorNames.getSelectedItem() + "," + lblDoctorAvailableTimeFrom.getText() + "," + timeStatus.getText());
                             formatter.close();
                             message = "success";
                         } catch (Exception exception) {
@@ -680,7 +681,6 @@ public class Gui extends JFrame {
         btnReset.addActionListener(e -> {
             cbDoctorNames.setSelectedIndex(0);
             lblDoctorAvailableTimeFrom.setText("");
-            lblDoctorAvailableTimeTo.setText("");
         });
 
         scrollPane.add(doctorAvailabilityJPanel);
@@ -828,10 +828,24 @@ public class Gui extends JFrame {
             }
             formatter.close();
             message = "success";
+            printSavedConsultation();
         } catch (Exception exception) {
             message = "error";
         }
         return message;
+    }
+
+    private void printSavedConsultation() {
+        try {
+            Formatter formatter = new Formatter("assets/files/savedConsultations.txt");
+            if (consultations.size() > 0) {
+                for (Consultation consultation : consultations) {
+                    formatter.format("%s", consultation.toFormattedString());
+                }
+            }
+            formatter.close();
+        } catch (Exception exception) {
+        }
     }
 
     private boolean savePatients() {
