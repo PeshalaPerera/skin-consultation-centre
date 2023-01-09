@@ -22,6 +22,10 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         initialise();
     }
 
+    /**
+     * In Console Menu
+     * to add new doctors to the system
+     */
     @Override
     public Doctor addDoctor() {
         Doctor doctor = null;
@@ -47,6 +51,10 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         return doctor;
     }
 
+    /**
+     * In Console Menu
+     * to delete doctors from the system
+     */
     @Override
     public Doctor deleteDoctor() {
         Doctor deletedDoctor = null;
@@ -73,6 +81,10 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         return deletedDoctor;
     }
 
+    /**
+     * In Console Menu
+     * to display the list of doctors saved in the system
+     */
     @Override
     public Doctor printList() {
         try {
@@ -90,6 +102,10 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         return null;
     }
 
+    /**
+     * In Console Menu
+     * to save doctor arraylist to the text file
+     */
     @Override
     public void saveFile() {
         try {
@@ -108,11 +124,20 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         }
     }
 
+    /**
+     * In Console Menu
+     * to start swing gui
+     */
     @Override
     public void viewGui() {
         Gui.start();
     }
 
+    /**
+     * In Console Menu
+     * to get the previous instance outputs to the current instance
+     * always runs at the beginning ao a new instance
+     */
     private void initialise() {
         try {
             File myObj = new File("assets/files/doctorsList.txt");
@@ -130,6 +155,11 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         }
     }
 
+    /**
+     * In Console Menu
+     * to check whether the entered doctor medical license number
+     * available in the system
+     */
     private void checkNo(Integer number) {
         int getMedicalLicenceNo = number;
         try {
@@ -150,6 +180,10 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         }
     }
 
+    /**
+     * In Console Menu
+     * to display the status of the doctors in the system
+     */
     private void showStatus() {
         try {
             System.out.println("Total Number of doctors in the centre : " + doctorList.size());
@@ -162,11 +196,18 @@ public class WestminsterSkinConsultationManager implements SkinConsultationManag
         }
     }
 
+    /**
+     * common string input function
+     */
     private String getStringInput(String message) {
         System.out.println("*** " + message + " : ");
         return scan.next().toLowerCase();
     }
 
+    /**
+     * common Integer input function
+     * validate the entered integer value
+     */
     private Integer getIntInput(String message) {
         int input = 0;
         boolean isNumber = false;

@@ -69,6 +69,10 @@ public class Gui extends JFrame {
         start();
     }
 
+    /**
+     * swing gui
+     * panel to display the doctor table
+     */
     private JPanel consultantsPanel() {
         JPanel mainConsultantsPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
@@ -104,6 +108,10 @@ public class Gui extends JFrame {
         return mainConsultantsPanel;
     }
 
+    /**
+     * swing gui
+     * panel to display menu
+     */
     private JPanel menuPanel() {
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JPanel instructionsPanel = new JPanel();
@@ -189,18 +197,30 @@ public class Gui extends JFrame {
         return mainPanel;
     }
 
+    /**
+     * swing gui
+     * panel to display add consultation form
+     */
     private JPanel addConsultation() {
         JPanel mainAddConsultantPanel = addConsultationsPanel();
         mainAddConsultantPanel.setBackground(new Color(255, 255, 255));
         return mainAddConsultantPanel;
     }
 
+    /**
+     * swing gui
+     * panel to display doctor availability form
+     */
     private JPanel doctorAvailability() {
         JPanel mainDoctorPanel = doctorAvailabilityPanel();
         mainDoctorPanel.setBackground(new Color(255, 255, 255));
         return mainDoctorPanel;
     }
 
+    /**
+     * swing gui
+     * panel to display saved consultation table
+     */
     private JPanel savedConsultations() {
         savedConsultationsPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
@@ -257,6 +277,10 @@ public class Gui extends JFrame {
         return savedConsultationsPanel;
     }
 
+    /**
+     * swing gui
+     * create the consultants table
+     */
     private JTable consultantsTable() {
         ArrayList<String[]> doctorList = getDoctorFileContent();
         String[][] data = doctorList.toArray(String[][]::new);
@@ -287,6 +311,10 @@ public class Gui extends JFrame {
         return table;
     }
 
+    /**
+     * swing gui
+     * to get the doctor list text file content
+     */
     private ArrayList<String[]> getDoctorFileContent() {
         File myObj = new File("assets/files/doctorsList.txt");
         ArrayList<String[]> doctorList = new ArrayList<>();
@@ -307,6 +335,10 @@ public class Gui extends JFrame {
         return doctorList;
     }
 
+    /**
+     * swing gui
+     * to get the saved consultations text file content
+     */
     private ArrayList<String[]> getSavedConsultationsContent() {
         File myObj = new File("assets/files/savedConsultations.txt");
         ArrayList<String[]> savedConsultationsList = new ArrayList<>();
@@ -327,6 +359,10 @@ public class Gui extends JFrame {
         return savedConsultationsList;
     }
 
+    /**
+     * swing gui
+     * to get the available times text file content to the table
+     */
     private ArrayList<String[]> getAvailableTimesContent(String name) {
         File myObj = new File("assets/files/doctorAvailableTimes.txt");
         ArrayList<String[]> availableTimesList = new ArrayList<>();
@@ -351,6 +387,10 @@ public class Gui extends JFrame {
         return availableTimesList;
     }
 
+    /**
+     * swing gui
+     * to get the doctor list text file content
+     */
     private ArrayList<String[]> getTimesFileContent() {
         File myObj = new File("assets/files/doctorAvailableTimes.txt");
         ArrayList<String[]> timesList = new ArrayList<>();
@@ -371,6 +411,10 @@ public class Gui extends JFrame {
         return timesList;
     }
 
+    /**
+     * swing gui
+     * panel to display add consultations form
+     */
     private JPanel addConsultationsPanel() {
         addConsultationPanel.setBackground(new Color(255, 255, 255));
         JPanel headerPanel = new JPanel();
@@ -605,6 +649,10 @@ public class Gui extends JFrame {
         return addConsultationPanel;
     }
 
+    /**
+     * swing gui
+     * panel to display doctor availability form
+     */
     private JPanel doctorAvailabilityPanel() {
         JScrollPane scrollPane = new JScrollPane();
         doctorAvailabilityJPanel.setBackground(new Color(255, 255, 255));
@@ -744,6 +792,10 @@ public class Gui extends JFrame {
         return doctorAvailabilityJPanel;
     }
 
+    /**
+     * swing gui
+     * to get the previous instance data to new instance
+     */
     private String initConsultations() {
         String status;
         try {
@@ -767,6 +819,10 @@ public class Gui extends JFrame {
         return status;
     }
 
+    /**
+     * swing gui
+     * to get the previous instance doctor list to new instance
+     */
     private void initDoctor() {
         try {
             File myObj = new File("assets/files/doctorsList.txt");
@@ -784,6 +840,10 @@ public class Gui extends JFrame {
         }
     }
 
+    /**
+     * swing gui
+     * to get the previous instance patient list to new instance
+     */
     private void initPatient() {
         try {
             File myObj = new File("assets/files/patientsList.txt");
@@ -803,6 +863,10 @@ public class Gui extends JFrame {
         }
     }
 
+    /**
+     * swing gui
+     * to get the previous instance available times list to new instance
+     */
     private String initAvailableTimes() {
         String status;
         try {
@@ -824,6 +888,10 @@ public class Gui extends JFrame {
         return status;
     }
 
+    /**
+     * swing gui
+     * to calculate the cost of the consultation
+     */
     private Double costCalculator(Integer hours, String name) {
         Integer cost;
         Patient patientAvailable = getPatientByName(name, patientList);
@@ -835,6 +903,10 @@ public class Gui extends JFrame {
         return Double.parseDouble(String.valueOf(cost));
     }
 
+    /**
+     * swing gui
+     * to get the patient details by name
+     */
     private Patient getPatientByName(String name, ArrayList<Patient> patientList) {
         for (Patient patient : patientList) {
             if (patient.getName().equals(name)) {
@@ -844,6 +916,10 @@ public class Gui extends JFrame {
         return null;
     }
 
+    /**
+     * swing gui
+     * to get the doctor details by name
+     */
     private Doctor getDoctorByName(String name, ArrayList<Doctor> doctorList) {
         for (Doctor doctor : doctorList) {
             if (doctor.getName().equals(name)) {
@@ -853,6 +929,10 @@ public class Gui extends JFrame {
         return null;
     }
 
+    /**
+     * swing gui
+     * to get the patient details by id
+     */
     private Patient getPatientById(int id, ArrayList<Patient> patientList) {
         for (Patient patient : patientList) {
             if (patient.getId() == id) {
@@ -862,6 +942,10 @@ public class Gui extends JFrame {
         return null;
     }
 
+    /**
+     * swing gui
+     * to get the doctor details by medical licence number
+     */
     private Doctor getDoctorByMedicalLicenceNo(int medicalLicenceNo, ArrayList<Doctor> doctorList) {
         for (Doctor doctor : doctorList) {
             if (doctor.getMedicalLicenceNo() == medicalLicenceNo) {
@@ -871,6 +955,10 @@ public class Gui extends JFrame {
         return null;
     }
 
+    /**
+     * swing gui
+     * to save the consultations to the text file
+     */
     private String saveConsultation() {
         String message;
         try {
@@ -889,6 +977,10 @@ public class Gui extends JFrame {
         return message;
     }
 
+    /**
+     * swing gui
+     * to save the saved consultations to the text file
+     */
     private void printSavedConsultation() {
         try {
             Formatter formatter = new Formatter("assets/files/savedConsultations.txt");
@@ -903,6 +995,10 @@ public class Gui extends JFrame {
         }
     }
 
+    /**
+     * swing gui
+     * to save the patients to the text file
+     */
     private boolean savePatients() {
         boolean status = false;
         try {
@@ -920,10 +1016,18 @@ public class Gui extends JFrame {
         return status;
     }
 
+    /**
+     * swing gui
+     * to get the doctor names combo box values
+     */
     private String[] doctorDropdown(ArrayList<Doctor> doctorList) {
         return doctorList.stream().map(doctor -> doctor.getName()).toArray(String[]::new);
     }
 
+    /**
+     * swing gui
+     * main heading label styles of the application
+     */
     private JLabel mainHeading(String message) {
         JLabel lbl = new JLabel(message, JLabel.LEFT);
         lbl.setFont(new Font(null, Font.BOLD, 25));
@@ -932,6 +1036,10 @@ public class Gui extends JFrame {
         return lbl;
     }
 
+    /**
+     * swing gui
+     * sub heading label styles of the application
+     */
     private JLabel subHeading(String message) {
         JLabel lbl = new JLabel(message, JLabel.LEFT);
         lbl.setFont(new Font(null, Font.BOLD, 22));
@@ -940,6 +1048,10 @@ public class Gui extends JFrame {
         return lbl;
     }
 
+    /**
+     * swing gui
+     * main header label styles of the application
+     */
     private JLabel mainHeader() {
         JLabel label = new JLabel("SKIN CONSULTATION CENTRE");
         label.setForeground(new Color(2, 48, 71));
@@ -948,6 +1060,10 @@ public class Gui extends JFrame {
         return label;
     }
 
+    /**
+     * swing gui
+     * details label styles of the application
+     */
     private JLabel details(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(new Color(222, 236, 239));
@@ -956,6 +1072,10 @@ public class Gui extends JFrame {
         return label;
     }
 
+    /**
+     * swing gui
+     * form label styles of the application
+     */
     private JLabel label(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font(null, Font.BOLD, 15));
@@ -964,6 +1084,10 @@ public class Gui extends JFrame {
         return label;
     }
 
+    /**
+     * swing gui
+     * form text field styles of the application
+     */
     private JTextField textField() {
         JTextField txtField = new JTextField();
         txtField.setFont(new Font(null, Font.PLAIN, 15));
@@ -971,6 +1095,10 @@ public class Gui extends JFrame {
         return txtField;
     }
 
+    /**
+     * swing gui
+     * form buttons styles of the application
+     */
     private JButton button(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font(null, Font.BOLD, 15));
@@ -980,6 +1108,10 @@ public class Gui extends JFrame {
         return btn;
     }
 
+    /**
+     * swing gui
+     * form date button styles of the application
+     */
     private JButton dateButton(String text) {
         JButton btn = new JButton(text);
         btn.setForeground(new Color(144, 224, 239));
@@ -987,6 +1119,10 @@ public class Gui extends JFrame {
         return btn;
     }
 
+    /**
+     * swing gui
+     * message dialog box styles of the application
+     */
     private void showMessageDialog(String message, JPanel panel) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText(message);
@@ -995,6 +1131,10 @@ public class Gui extends JFrame {
         JOptionPane.showMessageDialog(mainPanel, lblMessage);
     }
 
+    /**
+     * swing gui
+     * warning dialog box styles of the application
+     */
     private void showWarningDialog(String message, JPanel panel) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText(message);
@@ -1004,6 +1144,10 @@ public class Gui extends JFrame {
                 JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * swing gui
+     * error dialog box styles of the application
+     */
     private void showErrorMessageDialog(JPanel panel) {
         JLabel lblMessage = new JLabel();
         lblMessage.setText("An Error Occurred!!!");

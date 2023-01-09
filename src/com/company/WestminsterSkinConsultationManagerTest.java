@@ -14,6 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WestminsterSkinConsultationManagerTest {
 
+    /**
+     * junit testing
+     * add a doctor to the system
+     */
     @Test
     void addDoctor() {
         String input = "peshala\n" +
@@ -33,6 +37,10 @@ class WestminsterSkinConsultationManagerTest {
         assertEquals("sample", doctor.getSpecialization());
     }
 
+    /**
+     * junit testing
+     * delete a doctor from the system
+     */
     @Test
     void deleteDoctor() {
         String input = "44\n";
@@ -42,6 +50,10 @@ class WestminsterSkinConsultationManagerTest {
         assertEquals(44, doctor.getMedicalLicenceNo());
     }
 
+    /**
+     * junit testing
+     * print the list of doctors in the system
+     */
     @Test
     void printList() {
         String input = "";
@@ -50,6 +62,10 @@ class WestminsterSkinConsultationManagerTest {
         manager.printList();
     }
 
+    /**
+     * junit testing
+     * save the doctor arraylist to the text file
+     */
     @Test
     void saveFile() {
         String input = "";
@@ -58,6 +74,10 @@ class WestminsterSkinConsultationManagerTest {
         manager.saveFile();
     }
 
+    /**
+     * junit testing
+     * start java swing gui
+     */
     @Test
     void viewGui() {
         Gui.start();
